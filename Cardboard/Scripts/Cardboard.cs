@@ -810,11 +810,11 @@ See log for details.";
       }
       if (VRModeEnabled) {
           style.fontSize = (int)(50 * Screen.width / 1920f / 2);
-          GUI.Label(new Rect(0, 0, Screen.width / 2, Screen.height), warning, style);
-          GUI.Label(new Rect(Screen.width / 2, 0, Screen.width / 2, Screen.height), warning, style);
+		  UnityEngine.GUILabel(new Rect(0, 0, Screen.width / 2, Screen.height), warning, style);
+		  UnityEngine.GUI.Label(new Rect(Screen.width / 2, 0, Screen.width / 2, Screen.height), warning, style);
       } else {
           style.fontSize = (int)(50 * Screen.width / 1920f);
-          GUI.Label(new Rect(0, 0, Screen.width, Screen.height), warning, style);
+		  UnityEngine.GUI.Label(new Rect(0, 0, Screen.width, Screen.height), warning, style);
       }
   }
 #endif

@@ -37,7 +37,7 @@ public class CardboardEditor : Editor {
     "Whether tapping the back button exits the app.");
 
   public override void OnInspectorGUI() {
-    GUI.changed = false;
+    UnityEngine.GUI.changed = false;
 
     DrawDefaultInspector();
 
@@ -68,7 +68,7 @@ public class CardboardEditor : Editor {
     cardboard.BackButtonExitsApp =
       EditorGUILayout.Toggle(backButtonExitsAppLabel, cardboard.BackButtonExitsApp);
 
-    if (GUI.changed) {
+	if (UnityEngine.GUI.changed) {
       EditorUtility.SetDirty(cardboard);
     }
 

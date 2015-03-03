@@ -98,7 +98,7 @@ public class CardboardGUIMouse : MonoBehaviour {
       size.x = pointerImage.width;
       size.y = pointerImage.height;
     }
-    GUI.DrawTexture(new Rect(pos.x - spot.x, Screen.height - pos.y - spot.y, size.x, size.y),
+	UnityEngine.GUI.DrawTexture(new Rect(pos.x - spot.x, Screen.height - pos.y - spot.y, size.x, size.y),
                     pointerImage, ScaleMode.StretchToFill);
   }
 }
