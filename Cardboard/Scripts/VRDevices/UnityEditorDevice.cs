@@ -57,7 +57,7 @@ public class UnityEditorDevice : BaseVRDevice {
   private bool RemoteCommunicating {
     get {
       if (!remoteCommunicating) {
-#if UNITY5
+#if UNITY_5
         remoteCommunicating = EditorApplication.isRemoteConnected;
 #else
         remoteCommunicating = Vector3.Dot(Input.gyro.rotationRate, Input.gyro.rotationRate) > 0.05;
