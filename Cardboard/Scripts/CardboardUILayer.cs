@@ -58,7 +58,7 @@ public class CardboardUILayer {
 
   private void ComputeMatrix() {
     centerWidthPx = kCenterLineThicknessDp / 160.0f * DisplayMetricsAndroid.XDPI / 2;
-    buttonWidthPx = kButtonWidthDp / 160.0f * DisplayMetricsAndroid.YDPI / 2;
+    buttonWidthPx = kButtonWidthDp / 160.0f * DisplayMetricsAndroid.XDPI / 2;
     xScale = buttonWidthPx / Screen.width;
     yScale = buttonWidthPx / Screen.height;
     xfm = Matrix4x4.TRS(new Vector3(0.5f, yScale, 0), Quaternion.identity,
