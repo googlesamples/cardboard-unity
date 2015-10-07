@@ -88,7 +88,7 @@ BaseVRDevice
     int width = Mathf.Max(Screen.width, Screen.height);
     int height = Mathf.Min(Screen.height, Screen.width);
 
-    Start(width, height, Screen.dpi, Screen.dpi);
+    Start(width, height, DisplayMetricsAndroid.XDPI, DisplayMetricsAndroid.YDPI);
     SetEventCallback(OnVREvent);
   }
 
