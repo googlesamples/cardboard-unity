@@ -1,4 +1,4 @@
-﻿// Copyright 2014 Google Inc. All rights reserved.
+// Copyright 2014 Google Inc. All rights reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -115,17 +115,17 @@ public class CardboardEye : MonoBehaviour {
 
   private void Setup() {
     // Shouldn't happen because of the check in Start(), but just in case...
-    if (controller == null) {
+    if (Controller == null) {
       return;
     }
 
-    var monoCamera = controller.GetComponent<Camera>();
+    var monoCamera = Controller.GetComponent<Camera>();
     Matrix4x4 proj = Cardboard.SDK.Projection(eye);
 
-    CopyCameraAndMakeSideBySide(controller, proj[0,2], proj[1,2]);
+    CopyCameraAndMakeSideBySide(Controller, proj[0,2], proj[1,2]);
 
     // Zoom the stereo cameras if requested.
-    float lerp = Mathf.Clamp01(controller.matchByZoom) * Mathf.Clamp01(controller.matchMonoFOV);
+    float lerp = Mathf.Clamp01(Controller.matchByZoom) * Mathf.Clamp01(Controller.matchMonoFOV);
     // Lerping the reciprocal of proj(1,1) so zooming is linear in the frustum width, not the depth.
     float monoProj11 = monoCamera.projectionMatrix[1, 1];
     float zoom = 1 / Mathf.Lerp(1 / proj[1, 1], 1 / monoProj11, lerp) / proj[1, 1];
@@ -135,7 +135,7 @@ public class CardboardEye : MonoBehaviour {
     // Calculate stereo adjustments based on the center of interest.
     float ipdScale;
     float eyeOffset;
-    controller.ComputeStereoAdjustment(proj[1, 1], transform.lossyScale.z,
+    Controller.ComputeStereoAdjustment(proj[1, 1], transform.lossyScale.z,
                                        out ipdScale, out eyeOffset);
 
     // Set up the eye's view transform.
@@ -178,7 +178,7 @@ public class CardboardEye : MonoBehaviour {
                              new Vector4(p.device.distortion.k1, p.device.distortion.k2));
     }
 
-    if (controller.StereoScreen == null) {
+    if (Controller.StereoScreen == null) {
       Rect rect = camera.rect;
       if (!Cardboard.SDK.DistortionCorrection
           || Cardboard.SDK.UseDistortionEffect) {
@@ -218,9 +218,9 @@ public class CardboardEye : MonoBehaviour {
     // the stereo screen.  Slow means it draws first to a side buffer, and then the buffer
     // is written to the screen. The slow method is provided because a lot of Image Effects
     // don't work if you draw to only part of the window.
-    if (controller.directRender) {
+    if (Controller.directRender) {
       // Redirect to our stereo screen.
-      camera.targetTexture = controller.StereoScreen;
+      camera.targetTexture = Controller.StereoScreen;
       // Draw!
       camera.Render();
     } else {
@@ -265,7 +265,7 @@ public class CardboardEye : MonoBehaviour {
   void OnPreCull() {
     if (camera.enabled) {
       Setup();
-      camera.targetTexture = controller.StereoScreen;
+      camera.targetTexture = Controller.StereoScreen;
     }
   }
 
