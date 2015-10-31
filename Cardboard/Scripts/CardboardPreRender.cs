@@ -17,22 +17,18 @@ using UnityEngine;
 [RequireComponent(typeof(Camera))]
 public class CardboardPreRender : MonoBehaviour {
 
-#if UNITY_5
-  new public Camera camera { get; private set; }
-#endif
+  public Camera cam { get; private set; }
 
   void Awake() {
-#if UNITY_5
-    camera = GetComponent<Camera>();
-#endif
+    cam = GetComponent<Camera>();
   }
 
   void Reset() {
-    camera.clearFlags = CameraClearFlags.SolidColor;
-    camera.backgroundColor = Color.black;
-    camera.cullingMask = 0;
-    camera.useOcclusionCulling = false;
-    camera.depth = -100;
+    cam.clearFlags = CameraClearFlags.SolidColor;
+	cam.backgroundColor = Color.black;
+	cam.cullingMask = 0;
+	cam.useOcclusionCulling = false;
+    cam.depth = -100;
   }
 
   void OnPreCull() {
@@ -40,7 +36,7 @@ public class CardboardPreRender : MonoBehaviour {
     if (Cardboard.SDK.ProfileChanged) {
       SetShaderGlobals();
     }
-    camera.clearFlags = Cardboard.SDK.VRModeEnabled ?
+    cam.clearFlags = Cardboard.SDK.VRModeEnabled ?
         CameraClearFlags.SolidColor : CameraClearFlags.Nothing;
     var stereoScreen = Cardboard.SDK.StereoScreen;
     if (stereoScreen != null && !stereoScreen.IsCreated()) {

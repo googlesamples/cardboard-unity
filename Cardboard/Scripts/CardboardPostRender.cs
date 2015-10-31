@@ -17,9 +17,7 @@ using UnityEngine;
 [RequireComponent(typeof(Camera))]
 public class CardboardPostRender : MonoBehaviour {
 
-#if UNITY_5
-  new public Camera camera { get; private set; }
-#endif
+  public Camera cam { get; private set; }
 
   // Distortion mesh parameters.
 
@@ -41,19 +39,17 @@ public class CardboardPostRender : MonoBehaviour {
   private Matrix4x4 xfm;
 
   void Reset() {
-    camera.clearFlags = CameraClearFlags.Depth;
-    camera.backgroundColor = Color.magenta;  // Should be noticeable if the clear flags change.
-    camera.orthographic = true;
-    camera.orthographicSize = 0.5f;
-    camera.cullingMask = 0;
-    camera.useOcclusionCulling = false;
-    camera.depth = 100;
+    cam.clearFlags = CameraClearFlags.Depth;
+    cam.backgroundColor = Color.magenta;  // Should be noticeable if the clear flags change.
+    cam.orthographic = true;
+    cam.orthographicSize = 0.5f;
+    cam.cullingMask = 0;
+    cam.useOcclusionCulling = false;
+    cam.depth = 100;
   }
 
   void Awake() {
-#if UNITY_5
-    camera = GetComponent<Camera>();
-#endif
+    cam = GetComponent<Camera>();
     Reset();
     meshMaterial = new Material(Shader.Find("Cardboard/UnlitTexture"));
     uiMaterial = new Material(Shader.Find("Cardboard/SolidColor"));
@@ -71,12 +67,12 @@ public class CardboardPostRender : MonoBehaviour {
     float realAspect = (float)Screen.width / Screen.height;
     float fakeAspect = Cardboard.SDK.Profile.screen.width / Cardboard.SDK.Profile.screen.height;
     aspectComparison = fakeAspect / realAspect;
-    camera.orthographicSize = 0.5f * Mathf.Max(1, aspectComparison);
+    cam.orthographicSize = 0.5f * Mathf.Max(1, aspectComparison);
   }
 #endif
 
   void OnRenderObject() {
-    if (Camera.current != camera)
+    if (Camera.current != cam)
       return;
     Cardboard.SDK.UpdateState();
     var correction = Cardboard.SDK.DistortionCorrection;

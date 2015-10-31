@@ -73,15 +73,11 @@ public class CardboardEye : MonoBehaviour {
   private Vector4 unprojvec;
   private float interpPosition = 1;
 
-#if UNITY_5
-  // For backwards source code compatibility, since we refer to the camera component A LOT in
-  // this script.
-  new public Camera camera { get; private set; }
+  public Camera cam { get; private set; }
 
   void Awake() {
-    camera = GetComponent<Camera>();
+    cam = GetComponent<Camera>();
   }
-#endif
 
   void Start() {
     var ctlr = Controller;
@@ -90,7 +86,7 @@ public class CardboardEye : MonoBehaviour {
       enabled = false;
       return;
     }
-    // Save reference to the found controller and it's camera.
+    // Save reference to the found controller and its camera.
     controller = ctlr;
     monoCamera = controller.GetComponent<Camera>();
     UpdateStereoValues();
@@ -99,7 +95,7 @@ public class CardboardEye : MonoBehaviour {
   private void FixProjection(ref Matrix4x4 proj) {
     // Adjust for non-fullscreen camera.  Cardboard SDK assumes fullscreen,
     // so the aspect ratio might not match.
-    proj[0, 0] *= camera.rect.height / camera.rect.width / 2;
+    proj[0, 0] *= cam.rect.height / cam.rect.width / 2;
 
     // Cardboard had to pass "nominal" values of near/far to the SDK, which
     // we fix here to match our mono camera's specific values.
@@ -163,18 +159,18 @@ public class CardboardEye : MonoBehaviour {
     proj[1, 1] *= zoom;
 
     // Set the eye camera's projection for rendering.
-    camera.projectionMatrix = proj;
+    cam.projectionMatrix = proj;
     if (Application.isEditor) {
       // So you can see the approximate frustum in the Scene view when the camera is selected.
-      camera.fieldOfView = 2 * Mathf.Atan(1 / proj[1, 1]) * Mathf.Rad2Deg;
+      cam.fieldOfView = 2 * Mathf.Atan(1 / proj[1, 1]) * Mathf.Rad2Deg;
     }
 
     // Draw to the mono camera's target, or the stereo screen.
-    camera.targetTexture = monoCamera.targetTexture ?? Cardboard.SDK.StereoScreen;
-    if (camera.targetTexture == null) {
+    cam.targetTexture = monoCamera.targetTexture ?? Cardboard.SDK.StereoScreen;
+    if (cam.targetTexture == null) {
       // When drawing straight to screen, account for lens FOV limits.
       // Note: do this after all calls to FixProjection() which needs the unfixed rect.
-      camera.rect = FixViewport(camera.rect);
+      cam.rect = FixViewport(cam.rect);
     }
   }
 
@@ -196,7 +192,7 @@ public class CardboardEye : MonoBehaviour {
 
     if (updatePosition) {
       // Set view transform.
-      float proj11 = camera.projectionMatrix[1, 1];
+      float proj11 = cam.projectionMatrix[1, 1];
       float zScale = transform.lossyScale.z;
       Vector3 eyePos = controller.ComputeStereoEyePosition(eye, proj11, zScale);
       // Apply smoothing only if updating position every frame.
@@ -209,26 +205,26 @@ public class CardboardEye : MonoBehaviour {
     if (Cardboard.SDK.DistortionCorrection == Cardboard.DistortionCorrectionMethod.None) {
       // Correction matrix for use in surface shaders that do vertex warping for distortion.
       // Have to compute it every frame because cameraToWorldMatrix is changing constantly.
-      var fixProj = camera.cameraToWorldMatrix *
-                    Matrix4x4.Inverse(camera.projectionMatrix) *
+      var fixProj = cam.cameraToWorldMatrix *
+                    Matrix4x4.Inverse(cam.projectionMatrix) *
                     realProj;
       Shader.SetGlobalMatrix("_RealProjection ", realProj);
       Shader.SetGlobalMatrix("_FixProjection ", fixProj);
     } else {
       // Not doing vertex-based distortion.  Set up the parameters to make any vertex-warping
       // shaders in the project leave vertexes alone.
-      Shader.SetGlobalMatrix("_RealProjection ", camera.projectionMatrix);
-      Shader.SetGlobalMatrix("_FixProjection ", camera.cameraToWorldMatrix);
+      Shader.SetGlobalMatrix("_RealProjection ", cam.projectionMatrix);
+      Shader.SetGlobalMatrix("_FixProjection ", cam.cameraToWorldMatrix);
     }
     Shader.SetGlobalVector("_Projection", projvec);
     Shader.SetGlobalVector("_Unprojection", unprojvec);
-    Shader.SetGlobalFloat("_NearClip", camera.nearClipPlane);
+    Shader.SetGlobalFloat("_NearClip", cam.nearClipPlane);
   }
 
   void OnPreCull() {
     if (!Cardboard.SDK.VRModeEnabled || !monoCamera.enabled) {
       // Keep stereo enabled flag in sync with parent mono camera.
-      camera.enabled = false;
+      cam.enabled = false;
       return;
     }
     SetupStereo();
@@ -255,7 +251,7 @@ public class CardboardEye : MonoBehaviour {
 #if UNITY_EDITOR
     // Member variable 'camera' not always initialized when this method called in Editor.
     // So, we'll just make a local of the same name.  Same for controller's camera.
-    var camera = GetComponent<Camera>();
+    var cam = GetComponent<Camera>();
     var monoCamera = controller.GetComponent<Camera>();
 #endif
 
@@ -264,12 +260,12 @@ public class CardboardEye : MonoBehaviour {
         transform.localPosition : (eye == Cardboard.Eye.Left ? -ipd/2 : ipd/2) * Vector3.right;;
 
     // Sync the camera properties.
-    camera.CopyFrom(monoCamera);
-    camera.cullingMask ^= toggleCullingMask.value;
+    cam.CopyFrom(monoCamera);
+    cam.cullingMask ^= toggleCullingMask.value;
 
     // Not sure why we have to do this, but if we don't then switching between drawing to
     // the main screen or to the stereo rendertexture acts very strangely.
-    camera.depth = monoCamera.depth;
+    cam.depth = monoCamera.depth;
 
     // Reset transform, which was clobbered by the CopyFrom() call.
     // Since we are a child of the mono camera, we inherit its transform already.
@@ -281,7 +277,7 @@ public class CardboardEye : MonoBehaviour {
     // Note: The code is written this way so that non-fullscreen cameras
     // (PIP: picture-in-picture) still work in stereo.  Even if the PIP's content is
     // not going to be in stereo, the PIP itself still has to be rendered in both eyes.
-    Rect rect = camera.rect;
+    Rect rect = cam.rect;
 
     // Move away from edges if padding requested.  Some HMDs make the edges of the
     // screen a bit hard to see.
@@ -311,6 +307,6 @@ public class CardboardEye : MonoBehaviour {
       rect.y -= pary / 2 * parallax;
     }
 
-    camera.rect = rect;
+    cam.rect = rect;
   }
 }

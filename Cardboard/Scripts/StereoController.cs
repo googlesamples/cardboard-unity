@@ -239,15 +239,11 @@ public class StereoController : MonoBehaviour {
     }
   }
 
-#if UNITY_5
-  new public Camera camera { get; private set; }
-#endif
+  public Camera cam { get; private set; }
 
   void Awake() {
     AddStereoRig();
-#if UNITY_5
-    camera = GetComponent<Camera>();
-#endif
+    cam = GetComponent<Camera>();
   }
 
   /// Helper routine for creation of a stereo rig.  Used by the
@@ -268,7 +264,7 @@ public class StereoController : MonoBehaviour {
       head.trackPosition = false;
     }
 #if !UNITY_5
-    if (camera.tag == "MainCamera" && GetComponent<SkyboxMesh>() == null) {
+    if (cam.tag == "MainCamera" && GetComponent<SkyboxMesh>() == null) {
       gameObject.AddComponent<SkyboxMesh>();
     }
 #endif
@@ -310,7 +306,7 @@ public class StereoController : MonoBehaviour {
     // Move the eye so that COI has about the same size onscreen as in the mono camera FOV.
     // The radius affects the horizon location, which is where the screen-size matching has to
     // occur.
-    float scale = proj11 / camera.projectionMatrix[1, 1];  // vertical FOV
+    float scale = proj11 / cam.projectionMatrix[1, 1];  // vertical FOV
     float offset =
         Mathf.Sqrt(radius * radius + (distance * distance - radius * radius) * scale * scale);
     float eyeOffset = (distance - offset) * Mathf.Clamp01(matchMonoFOV) / zScale;
@@ -345,19 +341,19 @@ public class StereoController : MonoBehaviour {
       // Activate the eyes under our control.
       CardboardEye[] eyes = Eyes;
       for (int i = 0, n = eyes.Length; i < n; i++) {
-        eyes[i].camera.enabled = true;
+        eyes[i].cam.enabled = true;
       }
       // Turn off the mono camera so it doesn't waste time rendering.  Remember to reenable.
       // @note The mono camera is left on from beginning of frame till now in order that other game
       // logic (e.g. referring to Camera.main) continues to work as expected.
-      camera.enabled = false;
+      cam.enabled = false;
       renderedStereo = true;
     } else {
       Cardboard.SDK.UpdateState();
       // Make sure any vertex-distorting shaders don't break completely.
-      Shader.SetGlobalMatrix("_RealProjection", camera.projectionMatrix);
-      Shader.SetGlobalMatrix("_FixProjection", camera.cameraToWorldMatrix);
-      Shader.SetGlobalFloat("_NearClip", camera.nearClipPlane);
+      Shader.SetGlobalMatrix("_RealProjection", cam.projectionMatrix);
+      Shader.SetGlobalMatrix("_FixProjection", cam.cameraToWorldMatrix);
+      Shader.SetGlobalFloat("_NearClip", cam.nearClipPlane);
     }
   }
 
@@ -365,7 +361,7 @@ public class StereoController : MonoBehaviour {
     while (true) {
       // If *we* turned off the mono cam, turn it back on for next frame.
       if (renderedStereo) {
-        camera.enabled = true;
+        cam.enabled = true;
         renderedStereo = false;
       }
       yield return new WaitForEndOfFrame();
