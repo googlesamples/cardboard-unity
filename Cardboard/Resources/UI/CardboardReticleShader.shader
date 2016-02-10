@@ -62,7 +62,7 @@ Shader "Cardboard/CardboardReticle" {
       }
 
       fixed4 frag(fragmentInput i) : SV_Target {
-        fixed4 ret = fixed4(_Color.x, _Color.y, _Color.z, 1.0);
+        fixed4 ret = fixed4(_Color.x, _Color.y, _Color.z, _Color.a);
         return ret;
       }
 
