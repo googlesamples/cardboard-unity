@@ -30,8 +30,8 @@ public class CardboardProfile {
   /// to be placed in the Cardboard, i.e. landscape orientation.
   [System.Serializable]
   public struct Screen {
-    public float width;   // The long edge of the phone.
-    public float height;  // The short edge of the phone.
+    public float width;   // The long edge of the phone's screen.
+    public float height;  // The short edge of the phone's screen.
     public float border;  // Distance from bottom of the cardboard to the bottom edge of screen.
   }
 
