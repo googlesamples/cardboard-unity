@@ -45,7 +45,7 @@ public class CardboardAudioSource : MonoBehaviour {
 
   /// The default AudioClip to play.
   public AudioClip clip {
-    get { return clip; }
+    get { return sourceClip; }
     set {
       sourceClip = value;
       if (audioSource != null) {
