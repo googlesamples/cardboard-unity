@@ -24,10 +24,15 @@ public class CardboardReticle : MonoBehaviour, ICardboardPointer {
 
   /// Growth speed multiplier for the reticle/
   public float reticleGrowthSpeed = 8.0f;
+  // the layer of objects that trigger the reticle
   public LayerMask animLayer;
 
-  // Private members
-  private Material materialComp;
+  // use radial effect and Trigger with/out repeat;
+  public bool useRadial;
+  public bool useRadialRepeat;
+
+    // Private members
+    private Material materialComp;
   private GameObject targetObj;
 
   // Current inner angle of the reticle (in degrees).
@@ -50,10 +55,15 @@ public class CardboardReticle : MonoBehaviour, ICardboardPointer {
   // Maximum distance of the reticle (in meters).
   private const float kReticleDistanceMax = 10.0f;
 
+  // How much the Radial Discard Grow in time.
+  private const float kreticleRadialGrowth = 0.5f;
+    
   // Current inner and outer diameters of the reticle,
   // before distance multiplication.
   private float reticleInnerDiameter = 0.0f;
   private float reticleOuterDiameter = 0.0f;
+
+  private float reticleRadial = 0.0f;
 
   void Start () {
     CreateReticleVertices();
@@ -103,6 +113,12 @@ public class CardboardReticle : MonoBehaviour, ICardboardPointer {
   /// ray sent from the camera on the object.
   public void OnGazeStay(Camera camera, GameObject targetObject, Vector3 intersectionPosition) {
     SetGazeTarget(intersectionPosition,targetObject.layer);
+
+        // When using the Radial Effect, if it finish call a mouseclick event.
+        if (useRadial & reticleRadial >0.99) {
+            if (useRadialRepeat) { reticleRadial = 0; }
+            ExecuteEvents.Execute(targetObject, new BaseEventData(EventSystem.current), ExecuteEvents.submitHandler);
+        }
   }
 
   /// Called when the user's look no longer intersects an object previously
@@ -116,18 +132,20 @@ public class CardboardReticle : MonoBehaviour, ICardboardPointer {
     reticleDistanceInMeters = kReticleDistanceMax;
     reticleInnerAngle = kReticleMinInnerAngle;
     reticleOuterAngle = kReticleMinOuterAngle;
-  }
+    reticleRadial = 0;
+    }
 
   /// Called when the Cardboard trigger is initiated. This is practically when
   /// the user begins pressing the trigger.
   public void OnGazeTriggerStart(Camera camera) {
-    // Put your reticle trigger start logic here :)
-  }
+        reticleRadial = 0;
+        // Put your reticle trigger start logic here :)
+    }
 
   /// Called when the Cardboard trigger is finished. This is practically when
   /// the user releases the trigger.
   public void OnGazeTriggerEnd(Camera camera) {
-    // Put your reticle trigger end logic here :)
+        // Put your reticle trigger end logic here :)
   }
 
   private void CreateReticleVertices() {
@@ -208,7 +226,8 @@ public class CardboardReticle : MonoBehaviour, ICardboardPointer {
     materialComp.SetFloat("_InnerDiameter", reticleInnerDiameter * reticleDistanceInMeters);
     materialComp.SetFloat("_OuterDiameter", reticleOuterDiameter * reticleDistanceInMeters);
     materialComp.SetFloat("_DistanceInMeters", reticleDistanceInMeters);
-  }
+    materialComp.SetFloat("_RadialDiscard", reticleRadial);
+    }
 
   private void SetGazeTarget(Vector3 target, int layerObj) {
     Vector3 targetLocalPosition = transform.parent.InverseTransformPoint(target);
@@ -220,6 +239,10 @@ public class CardboardReticle : MonoBehaviour, ICardboardPointer {
         if (animLayer == (animLayer | (1 << layerObj))) {
             reticleInnerAngle = kReticleMinInnerAngle + kReticleGrowthAngle;
             reticleOuterAngle = kReticleMinOuterAngle + kReticleGrowthAngle;
+            if (useRadial) {
+                reticleRadial += kreticleRadialGrowth * Time.deltaTime;
+            }
+            
         }
   }
 }
