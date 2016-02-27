@@ -1,0 +1,310 @@
+Google Cardboard VR
+===================
+
+
+
+Version 1.0
+------------
+
+* Author - Brian Kehrer
+* June 1, 2015
+
+
+
+************
+Project Setup
+************
+
+
+
+*** Unity ***
+
+The project requires Unity Pro, version 4.6.5.  Deployment requires Android Pro, or iOS pro.  The pro requirement is necessary to conform with Unity’s licensing terms, as well as realtime shadows.
+
+Unity 5.0.x was not used because of serious instability and performance issues on Android at the time of development.
+
+
+
+*** Player Settings ***
+
+The project is built against Android 4.1. Jelly Bean.  It uses .NET 2.0, and could probably run on the subset as well.  For cardboard, the build must be locked to Landscape Left.
+
+I’m using a 32 bit display and 24 bit depth buffer for image quality, and depth precision.  It hasn’t impacted performance.  Because of the shader complexity, including the custom shadows, adjusting depth precision is NOT recommended.
+
+The rendering path is set to Vertex Lit to force Unity to use the cheapest rendering path.
+
+
+
+*** Quality Settings ***
+
+2x MSAA is on.  It has a dramatic impact on apparent resolution on the device.  4x would be better, but the affect on performance was too great.
+
+Pixel lights and shadows are off. 
+
+
+
+
+*** Script Execution Order ***
+
+VRInput should happen before standard time.  It performs the global UI raycast check in Update, and this information needs to be available immediately.
+
+The minecart scene was not added to the script execution list at build time, but since it moves the player in late update, it should happen before default time, when the camera updates.
+
+
+
+*** Layers ***
+
+VRUI is used for user interface detection.  It does not show up in shadows.
+VRGEO is used to block the gaze raycast, and thus draw the reticle at the correct depth.
+
+************
+Cardboard SDK & Custom Distortion Model
+************
+
+*** Latest SDK ***
+
+With support from Google, this app has made substantial deviations from the vanilla SDK.  As of writing this document, these changes are not documented, but are supposed to be integrated into future versions of the SDK.  For that reason, it is important to be familiar with the ‘standard’ SDK, before looking at the changes.
+
+The latest information should be available at:
+http://www.google.com/cardboard/
+or
+http://www.google.com/get/cardboard/
+
+Developer information for the Unity SDK is available here:
+https://developers.google.com/cardboard/unity/
+
+
+
+*** Vertex Displacement ***
+
+The standard Cardboard SDK performs a reverse lens distortion effect to each eye, in order to correct for the distortion caused by the physical lenses (the plastic you look through) in cardboard.  These lenses exist to alter the focal distance, so that users eye’s can focus on a screen a few inches away, and create the sensation of virtual space.
+
+The typical reverse distortion in the standard SDK is performed in a full screen render texture.  For performance reasons, this render texture is typically 16 bit, without any MSAA - and in fact may need to be rendered at reduced resolution.  On current generation hardware, this render texture consumes a large amount of power, and power means heat.  Most mobile devices became battery or thermally limited in around 20-30 minutes of use, in our early testing.  Additionally, we were told the overhead of the render texture might limit our draw calls to 20 or 30.
+
+Our app does not use the render texture method.  In cooperation with Google, we developed a method of pre-distorting the world in the vertex shader.  Since this distortion is non-linear, 3D models must be tessellated in proportion to their apparent size on screen, or else straight lines will appear to ‘warp’ as the user looks around.  This is because lens distortion is circular, however we only are distorting vertices - the lines between those vertices remain straight.  Imagine approximating a 1 inch circle with 5 segments, and then moving the 5 points about the circle.  The circle should be round, but instead is approximated by straight lines, which appear to move when the circle rotates.
+
+The undistort method, provided by Google, is located in CardboardDistortion.cginc.
+
+The undistort(float4 pos) function simply replaces a shader’s standard mul(UNITY_MATRIX_MVP, v.vertex) call.  It works by first converting the vertices from local to view space, performing the reverse lens distortion, then applying a special projection matrix.
+
+All of the values for the distortion are provided by the Cardboard SDK.  In the editor, it uses the standard MVP matrix.
+
+
+*** Vertex Displacement Performance ***
+
+You may wonder why we did this, especially since checking for distortion issues is tricky.  By not using the full screen render texture, performance more than doubled on our sample scenes immediately, using a full 32 bit back buffer, instead of a 16 bit render texture (which caused color banding), and with 2x MSAA turned on.  Furthermore, we were no longer bound by such strict draw call limitations.  The distortion is also a magnification distortion, so we have the benefit of increased resolution as well (since the render texture would be interpolated in a post process).
+
+Our performance testing revealed our target devices could handle 150 draw calls, and 500,000 vertices, with 2x MSAA.  Keep in mind, draw calls and vertex counts are doubled since we must render both eyes separately (this is true in the standard SDK as well).  So this means practically, our limits were 75 draw calls and 250,000 vertices.  Many of our shaders were close to or hit the Open GL ES 2.0 limit for vertex operations.
+
+Certain devices had some performance issues, which appeared to be related to fill rate.  This was puzzling since our pixel shaders were not complex.  It turned out assigning or removing textures to empty slots in materials accounted for most of the performance, and enabling mipmaps on almost every texture accounted for the rest.  
+
+There is obviously a tradeoff between absolute perfect distortion correction, and performance.  While the app looks low poly, many of the assets are highly tesselated in order to reduce distortion artifacts.
+
+*** Stabilization ***
+
+The cardboard SDK has no stabilization, and early feedback indicated a need to introduce some smoothing.  I added some simple smoothing to CardboardHead.  It uses the past 10 frames to determine the amount of smoothing.  If the user is moving quickly, we disable smoothing to decrease latency.  If the user isn’t moving much, we add a small amount of smoothing to remove jitter (which appears to be caused by caffeine consumption, not sensor noise).
+
+
+*** Other SDK Changes ***
+
+First, the SDK needed to be adapted to calculate the distortion values, but not actually create or render to a render texture, but instead apply them to the shader constants.
+
+There were some small optimizations made.  Previously, the SDK recalculated and applied the camera projection matrices every frame.  These only need to be applied when camera parameters are changed.  
+
+Other changes mostly involved caching components, or changing object allocations into structs.
+
+Performance of the 0.4.9 JDK plugins was very bad.  Initial profiling of 0.5.0 seems to indicate they switched all the code to native, and performance is better - however more profiling is required.
+
+
+*** Future SDK Improvements? ***
+
+I strongly feel the current implementation of the Unity side of the SDK needs some refactoring.  The Cardboard SDK should only do a few thing: report when the cardboard may have changed, and report the new projection matrices.  The Cardboard singleton itself should just have a static function which takes IPD, Left/Right eye flag, and camera parameters, and returns a projection matrix.  There should be another function that returns the current orientation.  Instead, information is bounced back and forth between different levels of abstraction.  This makes the whole camera prefab a bit bloated, when it should be very simple to set up from scratch.  I never got around to refactoring the code to the extent I would like.
+
+
+While working on the vertex displacement, I realized we could actually render the entire scene with a single camera by duplicating the input vertex buffer (mesh.vertices), and changing the vertex pipe to use a Left and Right projection matrix.  If we assigned one half of the duplicated vertices array the color red, and the other black, we could calculate vertex position in the shader via.
+
+float4 position = v.color.r * mul(MVP_LeftEye, v.vertex) + (1-v.color.r) * mul(MVP_RightEye, v.vertex)
+
+This would cut draw calls in half, but also double the memory of geometry. I ran out of time to experiment with this, and getting the clipping planes to behave correctly may also have been troublesome.
+
+
+
+
+************
+Making a Build
+************
+
+
+In build settings, the correct (and only) scene that should be used is MasterScene.
+
+Make a build for either iOS or Android.  The build process is a standard Unity build process.  For more information, see the Unity documentation specific to making builds for Android and iOS.
+
+Android builds will work immediately.
+
+iOS builds require adding CoreText, and libc++ in order for the Cardboard SDK to work correctly.  Read the Cardboard documentation regarding builds for Android and iOS for more details.
+
+Builds require Unity Pro, Unity Android Pro, and Unity iOS Pro.
+
+
+************
+Unity Scene Setup
+************
+
+*** Singletons ***
+
+- SceneManager
+The state machine
+
+- VRInput
+This is where gaze information (yaw and pitch), reticle animation, and input is exposed.
+
+- VRUtilities
+Some basic application startup information - sleep timeout and drift correction.  
+
+- UISounds
+Where the click and complete sounds live
+
+- SoundManager
+Holds the two ambient tracks, and interfaces with the audio sources.
+
+- PlayerMover
+Responsible for moving the player prefab, and controlling the acceleration between new movement points.
+
+- Toaster
+Just a message “Look down to move on” that is occasionally triggered
+
+- StereoCamera
+Adjust camera far clip, and environment scale
+
+- Blackout
+Controls the ‘fade to black/white/color’ effect
+Always renders on top.  Disables it’s mesh renderer when not visible to save performance.
+
+*** States ***
+
+These are pumped through the state machine, SceneManager, which handles transitions.  Each one specifies it’s own logic, so they are more or less self contained.
+
+- SplashScene
+A splash screen
+
+- MenuScene
+Yeah, the menu
+
+- TargetScene
+Lab 1: The balloons and the popping.
+
+- VisionScene
+Lab 2: The ui depth scene
+
+- MinecartScene
+Lab 3: minecarts.
+
+- RelativityScene
+Lab 4: The inception scene with boxes and flags
+
+- TrackingScene
+Lab 5: the windmill scene
+
+- RedwoodScene
+Lab 6-10: The hike
+
+
+
+*** Basic Rendering Setup ***
+
+- Main Camera Left
+Left Eye.  Screen viewport rect set by Cardboard SDK.
+
+- Main Camera Right
+Right Eye.  Screen viewport rect set by Cardboard SDK.
+
+- Clear Camera
+Clears to solid dark grey (19,19,19,0). Renders nothing.  Improves performance, since not clearing parts of the screen adversely affects some devices.
+
+- Reticle
+Attached to the player’s head.  Animates based on state (hover, normal).  Moves in Z-space, but stays fixed size on screen.  The reticle needs to be at the same depth as the object occupying the same visual space.  This is accomplished by using the VRInput gaze raycast. The reticle Z motion is smoothed a bit to reduce unsettling focal depth jumps.  
+
+
+
+*** Input ***
+
+- GazeTarget 
+All UI is built in screen space, and input handling derives from the base GazeTarget class.  GazeTarget records when a user begins looking at the object (hover), when a user clicks, and duration of events.  It also exposes booleans for querying these values.
+
+
+
+
+*** Advanced Rendering Setup ***
+
+Most of the rendering effects are performed in shaders.  Unfortunately, due to the complexity of setting up cameras with the correct projection matrices using the Cardboard SDK, it’s significantly easier to force depth by creating shader variants than creating render layers with cameras.
+
+The result of this, is a lot of incidental code duplication, much of which has not been refactored into cginc files.
+
+Most of the rendering derives from a single file, and additional shaders were created to either add or remove specific features.  Despite not being unified, the lighting model is entirely the same in all the shaders, except the background shaders, which use the values as they should look at infinite depth.
+
+- Diffuse Environment AO Undistortion
+Where everything started - I’ll go through all of it here.
+
+Vertex Shader
+	Undistort the vertices based on the SDK undistortion
+	Calculate the UV coordinates based on the tiling and offsets specified in the material
+	Calculate the world normal —NOTE: this probably should have been normalized, but it doesn’t do much
+	Calculate the primary light using half-lambertian shading, premultiply with light color and alpha
+	Calculate the world position
+	Calculate the vector from world position to world camera position
+	Calculate the distance from the point to the camera
+	Normalize the position to camera vector (being careful not to NaN)
+	Calculate the rim power ( saturate(1-(-dot(worldNormal, cameraVec)));
+	Calculate the ambient color based on the Y axis (we blend to a different sky ambient color)
+	Calculate the final rim color
+	Calculate point light intensity and color based on distance
+	Calculate fog
+	Calculate shadows
+	
+Pixel Shader
+	Combine all those - lookup into textures.  Order matters!
+	
+
+
+
+- Fog
+Fog blends between a zenith color, and a horizon color.  The horizon color is a blend between a forward and backward direction.  And each of those (zenith, horizon forward, horizon backward) blends to an infinity color, to create the effect of different layers of solid colors over each other into the distance.
+
+Fog is enabled / disabled in the EDITOR ONLY as a boolean on the Lighting object in the scene.
+
+- Shadows
+Shadows are custom implemented using a static render texture (e.g. like highlander, there can only be one shadow caster).  They do not always render every frame.  For example, in the hike, shadows are only recalculated when you are moving.  This saves battery / heat.  This is controlled on the shadow object.  The math in here was quick and dirty, and it might be a bit off, but it’s using Exponential Shadow Maps (http://web4.cs.ucl.ac.uk/staff/j.kautz/publications/esm_gi08.pdf).  I think they look better than Unity default shadows.  They can be fiddly to set up.
+
+The shadows also require everything is rendered using shader replacement to draw scene depth.  Certain shaders which use procedural vertex displacement (like the popping balloon) need custom depth shaders, as well.
+
+Keep in mind, UI should be assigned a layer to mask it from the shadow camera.
+
+- Time of day
+In the hike, all the lighting parameters are bundled up into ScriptableObjects which store a lighting condition, and then these are linearly interpolated.  So halfway between the red sky location and yellow dawn location, we’ll see some orange tint.
+
+
+
+*** Other Stuff ***
+
+- Look Down Menu
+The look down menu seems like it should be global.  It isn’t.  There isn’t a good reason for this, it should be refactored into a component of each of the states, or perhaps another application global which each state modifies on startup.
+
+- Reticle Color
+Each state configures the reticle color as it deems appropriate.  Some states hide the reticle, and then re-enable it when looking down at the look down menu.  
+
+- Lighting Object
+Each scene typically has it’s own lighting object.  Some have shadows, a few do not.  Lighting in the menu uses separate shaders so it can switch between the ‘two worlds’ of hike and labs.  This should be refactored to be animated on the lighting object, but again, we weren’t sure if we were going to return to a previous version where I clipped the worlds using the stencil buffer, so I left this flexibility around.  However, it’s no longer necessary, and the menu should use standard shaders, and the ‘primary’ and ‘secondary’ lighting support should be removed, as well as the associated menu-specific shaders.
+
+
+
+*** Hike Creation Process Notes ***
+
+The levels and assets in the hike were modeled in Cinema4D, typically UV’ed in Maya.  The individual assets then had Ambient occlusion maps generated in Cinema4D.  The ground geo used Unity’s light mapper to generate a light map, and then it was rescaled in photoshop to fit the actual UV’s.
+
+Objects were usually positioned in cinema, and then the entire scene was brought into Unity.  However, the scene was not used - instead we copied the transforms into a new prefab, and removed the references to the scenes (with a few exceptions, like the overlook).  This allowed our designers to use the placement tools in cinema, but still move objects in Unity later.
+
+Once in Unity, the assets were grouped into like materials, and batched in the editor into combined meshes to save on draw calls.  Older devices like the Nexus 5 were CPU bound until we optimized certain assets.  This optimization presents a very clear tradeoff between poly count and draw calls, as excessive batching can result in very ineffective culling, and therefor putting more pressure on the vertex unit.
+
+Many of the assets only use two colors, and the UVs should have been regrouped, and a special 2 color shader written (UV.x < 0.5 = Color A,UV.y > 0.5 = Color B).  This would save another texture lookup throughout most of the hike, however it would require remaking the ambient occlusion maps for those assets - so we ignored it.
+
+

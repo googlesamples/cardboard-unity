@@ -1,0 +1,96 @@
+/*
+ * Localizable.strings
+ *
+ * Guidelines:
+ *
+ * 1/ Write keys as CamelCase. In the code, this will be prefixed with kStr: kStrThisIsAKey.
+ *
+ * 2/ For descriptions, use 100-column limit and align multiple lines on the first character.
+ *    For strings, do not break lines.
+ *
+ * 3/ Write a meaningful description, so the translator can know what exactly you are talking about.
+ *
+ * 4/ Without context, a single word is hard to translate. For instance, the word "search" can be a
+ *    noun or a verb and they have different translations in other languages. Add the grammar
+ *    class, the verb tense or any other information to distinguish between homonyms.
+ *
+ * 5/ Supply the maximum number of characters for strings in the comment. For example:
+ *   /# Button label which starts warp (i.e. faster than light travel) mode. (30 chars) #/
+ *   "WarpModeButtonLabel" = "Warp Speed";
+ *
+ * 6/ For accessibility items, include "ACCESSIBILITY" in the key and comments. Generally
+ *    accessibility strings do not have a limit, because they are spoken. Indicate this with (no
+ *    limit).
+ */
+
+// ====================================
+// Strings on QR code scanning screen
+// ====================================
+
+/*
+ * TODO(bwuest): All of these string lengths, descriptions, and content should be reviewed
+ * in a seperate CL.
+ */
+
+/* Back button label used to go back to the previous screen. (15 chars) */
+"BackButtonLabel" = "Zurück";
+
+/* Label of the app title bar when on the QR code scanner screen. (45 chars) */
+"NavTitleLabel" = "QR-Scanner";
+
+/* Message shown to the user while waiting to process the QR code. (60 chars) */
+"LoadingMessage" = "Konfigurationsdaten werden verarbeitet";
+
+/* Error message shown to the user if the QR code is invalid. (60 chars) */
+"InvalidQRCode" = "Der QR-Code ist ungültig.";
+
+/* Error message shown to the user if the QR code is not a valid device profile. (60 chars) */
+"ParsingFailed" = "Fehler beim Verarbeiten der URL";
+
+/* Format string used as a temporary message shown after a successful device profile is set.
+ * (60 chars) */
+"DataSynced" = "%1$@ erkannt";
+
+/* Label shown next to example QR code. (40 chars) */
+"FindSymbolOnViewer" = "Suchen Sie dieses Symbol auf der Brille.";
+
+/* Label shown next to skip button that allows the user to skip the QR code step. (40 chars) */
+"CanNotFindSymbol" = "Sie sehen das Symbol nicht?";
+
+/* Button label for the control that allows the user to skip the QR code step. (40 chars) */
+"SkipButtonLabel" = "Überspringen";
+
+/* First line of the onboarding introduction. (40 chars) */
+"OnboardingIntroLine1" = "Mit der Einrichtung beginnen";
+
+/* Second line of the onboarding introduction. (80 chars) */
+"OnboardingIntroLine2" = "Legen Sie das Smartphone in die Brille ein\nund erleben Sie eine ganz andere Realität.";
+
+/* Instruction for the user that they should now put their phone in Cardboard. This is a generic
+ * instruction when the view type is not known. (50 chars) */
+"PlaceYourPhoneInCardboard" = "Legen Sie das Smartphone in die Cardboard-Brille ein.";
+
+/* Instruction for the user that they should now put their phone in Cardboard. This is used as a
+ * format string where the parameter is the view name. (50 chars) */
+"PlaceYourPhoneInViewerFormat" = "Legen Sie das Smartphone in die %1$@-Brille ein.";
+
+/* Title of settings view. (20 chars) */
+"SettingsNavTitleLabel" = "Einstellungen";
+
+/* Button label for enabling Cardboard viewer configurating sharing via the Cardboard app.
+ * (40 chars) */
+"SettingsSyncLabel" = "Mit Google Cardboard synchronisieren";
+
+/* Format string for label that display the viewer currently configured. (30 chars) */
+"SettingsCurrentViewerLabelFormat" = "Aktuelle Brille: %1$@";
+
+/* Reported name of Cardboard viewer when no viewer configured. (40 chars) */
+"DefaultViewerName" = "Standardbrille";
+
+/* Question shown to the user if they would like to switch their Cardboard
+   viewer. (40 chars) */
+"DifferentViewerQuestion" = "Using a different viewer?";
+
+/* Button text shown with the DifferentViewerQuestion that takes the user to the
+   screen to pair with a different Cardboard viewer. (15 chars) */
+"SwitchViewer" = "SWITCH";

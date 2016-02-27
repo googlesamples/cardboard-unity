@@ -1,0 +1,139 @@
+fileFormatVersion: 2
+guid: 7ccd8926d6b1f422aa5460ebf06a7609
+ModelImporter:
+  serializedVersion: 16
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: Ocean
+    100004: Overlook
+    100006: Trees
+    100008: Lake
+    100010: Trees_MeshPart0
+    100012: Trees_MeshPart1
+    100014: Beach
+    100016: Mountain_Near
+    100018: Mountain_Slopes
+    100020: Snow_Peaks
+    100022: Mountains
+    100024: Beach_1
+    100026: Trees_MeshPart2
+    100028: Land
+    100030: Ocean_Rocks
+    400000: //RootNode
+    400002: Ocean
+    400004: Overlook
+    400006: Trees
+    400008: Lake
+    400010: Trees_MeshPart0
+    400012: Trees_MeshPart1
+    400014: Beach
+    400016: Mountain_Near
+    400018: Mountain_Slopes
+    400020: Snow_Peaks
+    400022: Mountains
+    400024: Beach_1
+    400026: Trees_MeshPart2
+    400028: Land
+    400030: Ocean_Rocks
+    2300000: //RootNode
+    2300002: Ocean
+    2300004: Overlook
+    2300006: Trees
+    2300008: Lake
+    2300010: Trees_MeshPart0
+    2300012: Trees_MeshPart1
+    2300014: Beach
+    2300016: Mountain_Near
+    2300018: Mountain_Slopes
+    2300020: Snow_Peaks
+    2300022: Mountains
+    2300024: Beach_1
+    2300026: Trees_MeshPart2
+    2300028: Land
+    2300030: Ocean_Rocks
+    3300000: //RootNode
+    3300002: Ocean
+    3300004: Overlook
+    3300006: Trees
+    3300008: Lake
+    3300010: Trees_MeshPart0
+    3300012: Trees_MeshPart1
+    3300014: Beach
+    3300016: Mountain_Near
+    3300018: Mountain_Slopes
+    3300020: Snow_Peaks
+    3300022: Mountains
+    3300024: Beach_1
+    3300026: Trees_MeshPart2
+    3300028: Land
+    3300030: Ocean_Rocks
+    4300000: Overlook
+    4300002: Ocean
+    4300004: Trees
+    4300006: Lake
+    4300008: Trees_MeshPart0
+    4300010: Trees_MeshPart1
+    4300012: Beach
+    4300014: Mountain_Near
+    4300016: Mountain_Slopes
+    4300018: Snow_Peaks
+    4300020: Mountains
+    4300022: Beach_1
+    4300024: Trees_MeshPart2
+    4300026: Land
+    4300028: Ocean_Rocks
+    9500000: //RootNode
+  materials:
+    importMaterials: 0
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 0
+  meshes:
+    lODScreenPercentages: []
+    globalScale: .00999999978
+    meshCompression: 2
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 2
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  additionalBone: 0
+  userData: 

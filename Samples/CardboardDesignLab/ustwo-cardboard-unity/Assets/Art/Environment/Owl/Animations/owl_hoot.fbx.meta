@@ -1,0 +1,130 @@
+fileFormatVersion: 2
+guid: b5c634c7d5b7e4e30bb8db9805c83864
+ModelImporter:
+  serializedVersion: 16
+  fileIDToRecycleName:
+    100000: beak
+    100002: Body5
+    100004: chest
+    100006: eye_left
+    100008: eye_right
+    100010: eyelid_left
+    100012: eyelid_right
+    100014: head
+    100016: //RootNode
+    100018: root1
+    400000: beak
+    400002: Body5
+    400004: chest
+    400006: eye_left
+    400008: eye_right
+    400010: eyelid_left
+    400012: eyelid_right
+    400014: head
+    400016: //RootNode
+    400018: root1
+    4300000: Body5
+    7400000: Hoot
+    9500000: //RootNode
+    11100000: //RootNode
+    13700000: Body5
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 1
+    extraExposedTransformPaths: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Hoot
+      takeName: C4D Animation Take
+      firstFrame: 0
+      lastFrame: 36
+      wrapMode: 1
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Body5
+        weight: 1
+      - path: root1
+        weight: 1
+      - path: root1/chest
+        weight: 1
+      - path: root1/chest/head
+        weight: 1
+      - path: root1/chest/head/beak
+        weight: 1
+      - path: root1/chest/head/eye_left
+        weight: 1
+      - path: root1/chest/head/eye_right
+        weight: 1
+      - path: root1/chest/head/eyelid_left
+        weight: 1
+      - path: root1/chest/head/eyelid_right
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: .00999999978
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 1
+  additionalBone: 0
+  userData: 

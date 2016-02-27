@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: Splash_asset
+  m_Shader: {fileID: 4800000, guid: 74d5feb9d9f6d4caeba8ce0a45ba62a7, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 5
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  m_SavedProperties:
+    serializedVersion: 2
+    m_TexEnvs:
+      data:
+        first:
+          name: _MainTex
+        second:
+          m_Texture: {fileID: 2800000, guid: 66942bb12124d4992b88569d5e99c2e0, type: 3}
+          m_Scale: {x: 5, y: 5}
+          m_Offset: {x: 0, y: 0}
+    m_Floats:
+      data:
+        first:
+          name: _BarrelPower
+        second: 0.8
+      data:
+        first:
+          name: _BarrelLinear
+        second: 0.8
+      data:
+        first:
+          name: _BarrelPower2
+        second: 0.4
+      data:
+        first:
+          name: _BarrelPower4
+        second: 0
+    m_Colors:
+      data:
+        first:
+          name: _Color
+        second: {r: 0.5661765, g: 0.5661765, b: 0.5661765, a: 1}

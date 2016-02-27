@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bcc0c4b8a97884dc5a1b998aeefe7912, type: 3}
+  m_Name: 5_Dawn
+  m_EditorClassIdentifier: Assembly-CSharp::TimeOfDayLighting
+  timeSetting:
+    lightColor: {r: 0.9264706, g: 0.71298766, b: 0.4427984, a: 1}
+    shadowColor: {r: 0.67068374, g: 0.64186853, b: 0.8235294, a: 0}
+    ambientColor: {r: 0.27411333, g: 0.34299308, b: 0.47794116, a: 0}
+    lightIntensity: 1.1
+    ambientIntensity: 1.38
+    rimIntensity: 1.84
+    horizonColor: {r: 0.75, g: 0.47829613, b: 0.23161764, a: 0}
+    horizonFog: {r: 0.6102941, g: 0.34265602, b: 0.1974481, a: 0}
+    zenithColor: {r: 0.42288515, g: 0.38062283, b: 0.64705884, a: 0}
+    zenithFog: {r: 0.15084341, g: 0.17370687, b: 0.22794116, a: 0}
+    farClipPlane: 42
+    zenithFogDistance: 40
+    zenithFogPoint: 24
+    zenithFogBlendDistance: 12
+    horizonFogDistance: 28
+    horizonFogPoint: 26
+    horizonFogBlendDistance: 16
+    directionalFogIntensity: 0
+    directionalFogAngle: 0
+    directionalFogDistance: 0
+    directionalFogPoint: 0
+    directionalFogBlendDistance: 0
+    directionalColor: {r: 0, g: 0, b: 0, a: 0}
+    directionalFog: {r: 0, g: 0, b: 0, a: 0}
+    starIntensity: 0
+    yaw: -85.5
+    pitch: -6.55
+    offset: {x: 146.8, y: 2.9, z: -164.5}
+    shadowFieldOfView: 22
+    pointLightPosition: {x: 50.3, y: 24.96, z: -92.8}
+    pointLightRadius: 0.65
+    pointLightColor: {r: 0.875, g: 0.43767747, b: 0.15441176, a: 1}
+    shadowNearClip: 57.2
+    shadowFarClip: 192.7

@@ -1,0 +1,410 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &105528
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 405528}
+  - 33: {fileID: 3305528}
+  - 23: {fileID: 2305528}
+  m_Layer: 0
+  m_Name: bigDipper
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &131650
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 431650}
+  - 33: {fileID: 3331650}
+  - 23: {fileID: 2331650}
+  m_Layer: 0
+  m_Name: android
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &131652
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 431652}
+  - 33: {fileID: 3331652}
+  - 23: {fileID: 2331652}
+  - 114: {fileID: 11431650}
+  m_Layer: 0
+  m_Name: stars
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &131654
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 431654}
+  - 33: {fileID: 3331654}
+  - 23: {fileID: 2331654}
+  m_Layer: 0
+  m_Name: littleDipper
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &405528
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 105528}
+  m_LocalRotation: {x: -0.0000000058459655, y: -0.00000029802322, z: -0.0000000027086222,
+    w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 431652}
+  m_RootOrder: 1
+--- !u!4 &431650
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 131650}
+  m_LocalRotation: {x: -0.0000000058459655, y: -0.00000029802322, z: -0.0000000027086222,
+    w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 431652}
+  m_RootOrder: 2
+--- !u!4 &431652
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 131652}
+  m_LocalRotation: {x: 0.00000000484135, y: -0.2827948, z: 0.000000004251268, w: 0.9591805}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 431654}
+  - {fileID: 405528}
+  - {fileID: 431650}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+--- !u!4 &431654
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 131654}
+  m_LocalRotation: {x: -0.0000000058459655, y: -0.00000029802322, z: -0.0000000027086222,
+    w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 431652}
+  m_RootOrder: 0
+--- !u!23 &2305528
+MeshRenderer:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 105528}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_Materials:
+  - {fileID: 2100000, guid: 578c054c2cbff43bda3b003afd741a85, type: 2}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_UseLightProbes: 0
+  m_ReflectionProbeUsage: 1
+  m_ProbeAnchor: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+--- !u!23 &2331650
+MeshRenderer:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 131650}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_Materials:
+  - {fileID: 2100000, guid: 578c054c2cbff43bda3b003afd741a85, type: 2}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_UseLightProbes: 0
+  m_ReflectionProbeUsage: 1
+  m_ProbeAnchor: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+--- !u!23 &2331652
+MeshRenderer:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 131652}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_Materials:
+  - {fileID: 2100000, guid: d633b1f9a376a4aea9e5440c6d581685, type: 2}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_UseLightProbes: 0
+  m_ReflectionProbeUsage: 1
+  m_ProbeAnchor: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+--- !u!23 &2331654
+MeshRenderer:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 131654}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_Materials:
+  - {fileID: 2100000, guid: 578c054c2cbff43bda3b003afd741a85, type: 2}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_UseLightProbes: 0
+  m_ReflectionProbeUsage: 1
+  m_ProbeAnchor: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+--- !u!33 &3305528
+MeshFilter:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 105528}
+  m_Mesh: {fileID: 0}
+--- !u!33 &3331650
+MeshFilter:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 131650}
+  m_Mesh: {fileID: 0}
+--- !u!33 &3331652
+MeshFilter:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 131652}
+  m_Mesh: {fileID: 0}
+--- !u!33 &3331654
+MeshFilter:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 131654}
+  m_Mesh: {fileID: 0}
+--- !u!114 &11431650
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 131652}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0fe2ded19d76542ccb16df3fe6f3d983, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  meshRenderer: {fileID: 2331652}
+  meshFilter: {fileID: 3331652}
+  constellations:
+  - name: Little Dipper
+    meshRenderer: {fileID: 2331654}
+    meshFilter: {fileID: 3331654}
+    connections: 0000000001000000010000000200000002000000030000000300000004000000040000000500000005000000060000000000000003000000
+    yaw: 69.03
+    pitch: -7.7
+    stars:
+    - yaw: 33.1
+      pitch: 66
+      scale: 0.7
+    - yaw: 44.5
+      pitch: 68.1
+      scale: 0.5
+    - yaw: 51.7
+      pitch: 59.6
+      scale: 0.3
+    - yaw: 41.4
+      pitch: 57.4
+      scale: 0.5
+    - yaw: 44.1
+      pitch: 51.7
+      scale: 0.7
+    - yaw: 47.4
+      pitch: 46.1
+      scale: 0.5
+    - yaw: 45.38
+      pitch: 40.5
+      scale: 0.7
+  - name: Big Dipper
+    meshRenderer: {fileID: 2305528}
+    meshFilter: {fileID: 3305528}
+    connections: 0000000001000000010000000200000002000000030000000300000004000000040000000500000005000000060000000000000003000000
+    yaw: 7.47
+    pitch: 0
+    stars:
+    - yaw: 53
+      pitch: 41.1
+      scale: 0.8
+    - yaw: 38.2
+      pitch: 39.2
+      scale: 0.6
+    - yaw: 29.7
+      pitch: 50.8
+      scale: 0.5
+    - yaw: 43
+      pitch: 57.9
+      scale: 0.4
+    - yaw: 40.5
+      pitch: 69.8
+      scale: 0.7
+    - yaw: 45.3
+      pitch: 77.8
+      scale: 0.8
+    - yaw: 4.78
+      pitch: 81.2
+      scale: 0.6
+  - name: Android
+    meshRenderer: {fileID: 2331650}
+    meshFilter: {fileID: 3331650}
+    connections: 0000000001000000010000000200000002000000030000000300000004000000040000000500000005000000000000000400000006000000030000000700000008000000090000000a0000000b000000000000000c0000000c0000000d0000000d0000000e0000000e0000000f0000000f0000001000000010000000010000000d000000110000000f00000012000000
+    yaw: 110
+    pitch: 20.3
+    stars:
+    - yaw: 62.5
+      pitch: 40.9
+      scale: 0.4
+    - yaw: 83.1
+      pitch: 39
+      scale: 0.6
+    - yaw: 78.1
+      pitch: 30.78
+      scale: 0.5
+    - yaw: 74
+      pitch: 31.6
+      scale: 0.6
+    - yaw: 68.6
+      pitch: 32
+      scale: 0.3
+    - yaw: 63.2
+      pitch: 32.5
+      scale: 0.4
+    - yaw: 68.7
+      pitch: 28.2
+      scale: 0.6
+    - yaw: 74.5
+      pitch: 27.7
+      scale: 0.4
+    - yaw: 58.1
+      pitch: 40.9
+      scale: 0.6
+    - yaw: 43
+      pitch: 44.6
+      scale: 0.8
+    - yaw: 85.64
+      pitch: 38.2
+      scale: 0.3
+    - yaw: 83.2
+      pitch: 31.1
+      scale: 0.5
+    - yaw: 62.3
+      pitch: 44.1
+      scale: 0.6
+    - yaw: 68.3
+      pitch: 45.8
+      scale: 0.5
+    - yaw: 75.4
+      pitch: 45.8
+      scale: 0.3
+    - yaw: 80.8
+      pitch: 43.9
+      scale: 0.5
+    - yaw: 83.9
+      pitch: 41.1
+      scale: 0.3
+    - yaw: 63.7
+      pitch: 48.6
+      scale: 0.4
+    - yaw: 85.5
+      pitch: 46.2
+      scale: 0.6
+    - yaw: 78.1
+      pitch: 42
+      scale: 0.5
+    - yaw: 69.1
+      pitch: 43
+      scale: 0.7
+  randomStarCount: 400
+  rebuildStarsInEditor: 1
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 131652}
+  m_IsPrefabParent: 1

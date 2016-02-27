@@ -1,0 +1,77 @@
+fileFormatVersion: 2
+guid: f4c54309134144b0e983d505772a8090
+ModelImporter:
+  serializedVersion: 16
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: Trim_Char_E_2_1
+    100004: Trim_Char_H_1_1
+    100006: Trim_Char_T_1_1
+    400000: //RootNode
+    400002: Trim_Char_E_2_1
+    400004: Trim_Char_H_1_1
+    400006: Trim_Char_T_1_1
+    2300000: Trim_Char_E_2_1
+    2300002: Trim_Char_H_1_1
+    2300004: Trim_Char_T_1_1
+    3300000: Trim_Char_E_2_1
+    3300002: Trim_Char_H_1_1
+    3300004: Trim_Char_T_1_1
+    4300000: Trim_Char_T_1_1
+    4300002: Trim_Char_H_1_1
+    4300004: Trim_Char_E_2_1
+    9500000: //RootNode
+  materials:
+    importMaterials: 0
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 0
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 0
+    normalImportMode: 0
+    tangentImportMode: 2
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  additionalBone: 0
+  userData: 
