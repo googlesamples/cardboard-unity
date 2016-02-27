@@ -24,6 +24,7 @@ public class CardboardReticle : MonoBehaviour, ICardboardPointer {
 
   /// Growth speed multiplier for the reticle/
   public float reticleGrowthSpeed = 8.0f;
+  public LayerMask animLayer;
 
   // Private members
   private Material materialComp;
@@ -91,7 +92,7 @@ public class CardboardReticle : MonoBehaviour, ICardboardPointer {
   /// the user is looking at, and the intersectionPosition is the intersection
   /// point of the ray sent from the camera on the object.
   public void OnGazeStart(Camera camera, GameObject targetObject, Vector3 intersectionPosition) {
-    SetGazeTarget(intersectionPosition);
+    SetGazeTarget(intersectionPosition,targetObject.layer);
   }
 
   /// Called every frame the user is still looking at a valid GameObject. This
@@ -101,7 +102,7 @@ public class CardboardReticle : MonoBehaviour, ICardboardPointer {
   /// looking at, and the intersectionPosition is the intersection point of the
   /// ray sent from the camera on the object.
   public void OnGazeStay(Camera camera, GameObject targetObject, Vector3 intersectionPosition) {
-    SetGazeTarget(intersectionPosition);
+    SetGazeTarget(intersectionPosition,targetObject.layer);
   }
 
   /// Called when the user's look no longer intersects an object previously
@@ -209,12 +210,16 @@ public class CardboardReticle : MonoBehaviour, ICardboardPointer {
     materialComp.SetFloat("_DistanceInMeters", reticleDistanceInMeters);
   }
 
-  private void SetGazeTarget(Vector3 target) {
+  private void SetGazeTarget(Vector3 target, int layerObj) {
     Vector3 targetLocalPosition = transform.parent.InverseTransformPoint(target);
 
     reticleDistanceInMeters =
         Mathf.Clamp(targetLocalPosition.z, kReticleDistanceMin, kReticleDistanceMax);
-    reticleInnerAngle = kReticleMinInnerAngle + kReticleGrowthAngle;
-    reticleOuterAngle = kReticleMinOuterAngle + kReticleGrowthAngle;
+
+        // If the object's layer is part of the anim reticule layer mask then anim it
+        if (animLayer == (animLayer | (1 << layerObj))) {
+            reticleInnerAngle = kReticleMinInnerAngle + kReticleGrowthAngle;
+            reticleOuterAngle = kReticleMinOuterAngle + kReticleGrowthAngle;
+        }
   }
 }
