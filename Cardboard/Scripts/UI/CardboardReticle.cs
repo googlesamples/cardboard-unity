@@ -25,15 +25,16 @@ public class CardboardReticle : MonoBehaviour, ICardboardPointer {
   /// Growth speed multiplier for the reticle/
   public float reticleGrowthSpeed = 8.0f;
   // the layer of objects that trigger the reticle
-  public LayerMask animLayer;
+  public LayerMask interactiveLayer;
 
   // use radial effect and Trigger;
   public bool useRadial;
-  public bool useRadialRepeat;
-  private bool enabledDelayedTrigger;
+  public bool useRadialLoopTrigger;
+  public float reticleRadialSpeed = 0.5f;
+  private bool enabledDelayedTrigger = true;
 
     // Private members
-    private Material materialComp;
+  private Material materialComp;
   private GameObject targetObj;
 
   // Current inner angle of the reticle (in degrees).
@@ -56,8 +57,7 @@ public class CardboardReticle : MonoBehaviour, ICardboardPointer {
   // Maximum distance of the reticle (in meters).
   private const float kReticleDistanceMax = 10.0f;
 
-  // How much the Radial Discard Grow in time.
-  private const float kreticleRadialGrowth = 0.5f;
+
     
   // Current inner and outer diameters of the reticle,
   // before distance multiplication.
@@ -104,8 +104,8 @@ public class CardboardReticle : MonoBehaviour, ICardboardPointer {
   /// point of the ray sent from the camera on the object.
   public void OnGazeStart(Camera camera, GameObject targetObject, Vector3 intersectionPosition) {
     SetGazeTarget(intersectionPosition,targetObject.layer);
-    enabledDelayedTrigger = true;
-  }
+        enabledDelayedTrigger = true;
+    }
 
   /// Called every frame the user is still looking at a valid GameObject. This
   /// can be a 3D or UI element.
@@ -118,19 +118,19 @@ public class CardboardReticle : MonoBehaviour, ICardboardPointer {
 
         // When using the Radial Effect, if it finish call a mouseclick event.
         if (useRadial & reticleRadial > 0.999) {
-            if (useRadialRepeat) {
+            if (useRadialLoopTrigger) {
                 reticleRadial = 0;
                 enabledDelayedTrigger = true;
             }
 
-            // Send just one Call
-            if(enabledDelayedTrigger) {
+            // Send just one event
+            if (enabledDelayedTrigger) {
                 enabledDelayedTrigger = false;
                 var pointer = new PointerEventData(EventSystem.current);
                 ExecuteEvents.Execute(targetObject, pointer, ExecuteEvents.pointerClickHandler);
             }
-            //ExecuteEvents.Execute(targetObject, new BaseEventData(EventSystem.current), ExecuteEvents.submitHandler);
         }
+
   }
 
   /// Called when the user's look no longer intersects an object previously
@@ -158,7 +158,8 @@ public class CardboardReticle : MonoBehaviour, ICardboardPointer {
   /// the user releases the trigger.
   public void OnGazeTriggerEnd(Camera camera) {
         // Put your reticle trigger end logic here :)
-  }
+        
+    }
 
   private void CreateReticleVertices() {
     Mesh mesh = new Mesh();
@@ -248,11 +249,11 @@ public class CardboardReticle : MonoBehaviour, ICardboardPointer {
         Mathf.Clamp(targetLocalPosition.z, kReticleDistanceMin, kReticleDistanceMax);
 
         // If the object's layer is part of the anim reticule layer mask then anim it
-        if (animLayer == (animLayer | (1 << layerObj))) {
+        if (interactiveLayer == (interactiveLayer | (1 << layerObj))) {
             reticleInnerAngle = kReticleMinInnerAngle + kReticleGrowthAngle;
             reticleOuterAngle = kReticleMinOuterAngle + kReticleGrowthAngle;
             if (useRadial) {
-                reticleRadial += kreticleRadialGrowth * Time.deltaTime;
+                reticleRadial += reticleRadialSpeed * Time.deltaTime;
             }
             
         }
