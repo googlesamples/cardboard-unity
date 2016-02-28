@@ -27,9 +27,10 @@ public class CardboardReticle : MonoBehaviour, ICardboardPointer {
   // the layer of objects that trigger the reticle
   public LayerMask animLayer;
 
-  // use radial effect and Trigger with/out repeat;
+  // use radial effect and Trigger;
   public bool useRadial;
   public bool useRadialRepeat;
+  private bool enabledDelayedTrigger;
 
     // Private members
     private Material materialComp;
@@ -103,6 +104,7 @@ public class CardboardReticle : MonoBehaviour, ICardboardPointer {
   /// point of the ray sent from the camera on the object.
   public void OnGazeStart(Camera camera, GameObject targetObject, Vector3 intersectionPosition) {
     SetGazeTarget(intersectionPosition,targetObject.layer);
+    enabledDelayedTrigger = true;
   }
 
   /// Called every frame the user is still looking at a valid GameObject. This
@@ -115,9 +117,19 @@ public class CardboardReticle : MonoBehaviour, ICardboardPointer {
     SetGazeTarget(intersectionPosition,targetObject.layer);
 
         // When using the Radial Effect, if it finish call a mouseclick event.
-        if (useRadial & reticleRadial >0.99) {
-            if (useRadialRepeat) { reticleRadial = 0; }
-            ExecuteEvents.Execute(targetObject, new BaseEventData(EventSystem.current), ExecuteEvents.submitHandler);
+        if (useRadial & reticleRadial > 0.999) {
+            if (useRadialRepeat) {
+                reticleRadial = 0;
+                enabledDelayedTrigger = true;
+            }
+
+            // Send just one Call
+            if(enabledDelayedTrigger) {
+                enabledDelayedTrigger = false;
+                var pointer = new PointerEventData(EventSystem.current);
+                ExecuteEvents.Execute(targetObject, pointer, ExecuteEvents.pointerClickHandler);
+            }
+            //ExecuteEvents.Execute(targetObject, new BaseEventData(EventSystem.current), ExecuteEvents.submitHandler);
         }
   }
 
