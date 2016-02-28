@@ -20,26 +20,34 @@ using UnityEngine.EventSystems;
 [RequireComponent(typeof(Renderer))]
 public class CardboardReticle : MonoBehaviour, ICardboardPointer {
   /// Number of segments making the reticle circle.
-  public int reticleSegments = 20;
+  public int reticleSegments = 60;
 
   /// Growth speed multiplier for the reticle/
   public float reticleGrowthSpeed = 8.0f;
+  // the layer of objects that trigger the reticle
+  public LayerMask interactiveLayer;
 
-  // Private members
+  // use radial effect and Trigger;
+  public bool useRadial;
+  public bool useRadialLoopTrigger;
+  public float reticleRadialSpeed = 0.5f;
+  private bool enabledDelayedTrigger = true;
+
+    // Private members
   private Material materialComp;
   private GameObject targetObj;
 
   // Current inner angle of the reticle (in degrees).
   private float reticleInnerAngle = 0.0f;
   // Current outer angle of the reticle (in degrees).
-  private float reticleOuterAngle = 0.5f;
+  private float reticleOuterAngle = 0.3f;
   // Current distance of the reticle (in meters).
   private float reticleDistanceInMeters = 10.0f;
 
   // Minimum inner angle of the reticle (in degrees).
   private const float kReticleMinInnerAngle = 0.0f;
   // Minimum outer angle of the reticle (in degrees).
-  private const float kReticleMinOuterAngle = 0.5f;
+  private const float kReticleMinOuterAngle = 0.3f;
   // Angle at which to expand the reticle when intersecting with an object
   // (in degrees).
   private const float kReticleGrowthAngle = 1.5f;
@@ -49,10 +57,14 @@ public class CardboardReticle : MonoBehaviour, ICardboardPointer {
   // Maximum distance of the reticle (in meters).
   private const float kReticleDistanceMax = 10.0f;
 
+
+    
   // Current inner and outer diameters of the reticle,
   // before distance multiplication.
   private float reticleInnerDiameter = 0.0f;
   private float reticleOuterDiameter = 0.0f;
+
+  private float reticleRadial = 0.0f;
 
   void Start () {
     CreateReticleVertices();
@@ -91,8 +103,9 @@ public class CardboardReticle : MonoBehaviour, ICardboardPointer {
   /// the user is looking at, and the intersectionPosition is the intersection
   /// point of the ray sent from the camera on the object.
   public void OnGazeStart(Camera camera, GameObject targetObject, Vector3 intersectionPosition) {
-    SetGazeTarget(intersectionPosition);
-  }
+    SetGazeTarget(intersectionPosition,targetObject.layer);
+        enabledDelayedTrigger = true;
+    }
 
   /// Called every frame the user is still looking at a valid GameObject. This
   /// can be a 3D or UI element.
@@ -101,7 +114,23 @@ public class CardboardReticle : MonoBehaviour, ICardboardPointer {
   /// looking at, and the intersectionPosition is the intersection point of the
   /// ray sent from the camera on the object.
   public void OnGazeStay(Camera camera, GameObject targetObject, Vector3 intersectionPosition) {
-    SetGazeTarget(intersectionPosition);
+    SetGazeTarget(intersectionPosition,targetObject.layer);
+
+        // When using the Radial Effect, if it finish call a mouseclick event.
+        if (useRadial & reticleRadial > 0.999) {
+            if (useRadialLoopTrigger) {
+                reticleRadial = 0;
+                enabledDelayedTrigger = true;
+            }
+
+            // Send just one event
+            if (enabledDelayedTrigger) {
+                enabledDelayedTrigger = false;
+                var pointer = new PointerEventData(EventSystem.current);
+                ExecuteEvents.Execute(targetObject, pointer, ExecuteEvents.pointerClickHandler);
+            }
+        }
+
   }
 
   /// Called when the user's look no longer intersects an object previously
@@ -115,19 +144,22 @@ public class CardboardReticle : MonoBehaviour, ICardboardPointer {
     reticleDistanceInMeters = kReticleDistanceMax;
     reticleInnerAngle = kReticleMinInnerAngle;
     reticleOuterAngle = kReticleMinOuterAngle;
-  }
+    reticleRadial = 0;
+    }
 
   /// Called when the Cardboard trigger is initiated. This is practically when
   /// the user begins pressing the trigger.
   public void OnGazeTriggerStart(Camera camera) {
-    // Put your reticle trigger start logic here :)
-  }
+        reticleRadial = 0;
+        // Put your reticle trigger start logic here :)
+    }
 
   /// Called when the Cardboard trigger is finished. This is practically when
   /// the user releases the trigger.
   public void OnGazeTriggerEnd(Camera camera) {
-    // Put your reticle trigger end logic here :)
-  }
+        // Put your reticle trigger end logic here :)
+        
+    }
 
   private void CreateReticleVertices() {
     Mesh mesh = new Mesh();
@@ -207,14 +239,23 @@ public class CardboardReticle : MonoBehaviour, ICardboardPointer {
     materialComp.SetFloat("_InnerDiameter", reticleInnerDiameter * reticleDistanceInMeters);
     materialComp.SetFloat("_OuterDiameter", reticleOuterDiameter * reticleDistanceInMeters);
     materialComp.SetFloat("_DistanceInMeters", reticleDistanceInMeters);
-  }
+    materialComp.SetFloat("_RadialDiscard", reticleRadial);
+    }
 
-  private void SetGazeTarget(Vector3 target) {
+  private void SetGazeTarget(Vector3 target, int layerObj) {
     Vector3 targetLocalPosition = transform.parent.InverseTransformPoint(target);
 
     reticleDistanceInMeters =
         Mathf.Clamp(targetLocalPosition.z, kReticleDistanceMin, kReticleDistanceMax);
-    reticleInnerAngle = kReticleMinInnerAngle + kReticleGrowthAngle;
-    reticleOuterAngle = kReticleMinOuterAngle + kReticleGrowthAngle;
+
+        // If the object's layer is part of the anim reticule layer mask then anim it
+        if (interactiveLayer == (interactiveLayer | (1 << layerObj))) {
+            reticleInnerAngle = kReticleMinInnerAngle + kReticleGrowthAngle;
+            reticleOuterAngle = kReticleMinOuterAngle + kReticleGrowthAngle;
+            if (useRadial) {
+                reticleRadial += reticleRadialSpeed * Time.deltaTime;
+            }
+            
+        }
   }
 }
