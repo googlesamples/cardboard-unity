@@ -20,16 +20,17 @@ using UnityEngine.EventSystems;
 [RequireComponent(typeof(Renderer))]
 public class CardboardReticle : MonoBehaviour, ICardboardPointer {
   /// Number of segments making the reticle circle.
-  public int reticleSegments = 20;
+  public int reticleSegments = 60;
 
   /// Growth speed multiplier for the reticle/
   public float reticleGrowthSpeed = 8.0f;
   // the layer of objects that trigger the reticle
   public LayerMask animLayer;
 
-  // use radial effect and Trigger with/out repeat;
+  // use radial effect and Trigger;
   public bool useRadial;
   public bool useRadialRepeat;
+  private bool enabledDelayedTrigger;
 
     // Private members
     private Material materialComp;
@@ -38,14 +39,14 @@ public class CardboardReticle : MonoBehaviour, ICardboardPointer {
   // Current inner angle of the reticle (in degrees).
   private float reticleInnerAngle = 0.0f;
   // Current outer angle of the reticle (in degrees).
-  private float reticleOuterAngle = 0.5f;
+  private float reticleOuterAngle = 0.3f;
   // Current distance of the reticle (in meters).
   private float reticleDistanceInMeters = 10.0f;
 
   // Minimum inner angle of the reticle (in degrees).
   private const float kReticleMinInnerAngle = 0.0f;
   // Minimum outer angle of the reticle (in degrees).
-  private const float kReticleMinOuterAngle = 0.5f;
+  private const float kReticleMinOuterAngle = 0.3f;
   // Angle at which to expand the reticle when intersecting with an object
   // (in degrees).
   private const float kReticleGrowthAngle = 1.5f;
@@ -103,6 +104,7 @@ public class CardboardReticle : MonoBehaviour, ICardboardPointer {
   /// point of the ray sent from the camera on the object.
   public void OnGazeStart(Camera camera, GameObject targetObject, Vector3 intersectionPosition) {
     SetGazeTarget(intersectionPosition,targetObject.layer);
+    enabledDelayedTrigger = true;
   }
 
   /// Called every frame the user is still looking at a valid GameObject. This
@@ -115,9 +117,19 @@ public class CardboardReticle : MonoBehaviour, ICardboardPointer {
     SetGazeTarget(intersectionPosition,targetObject.layer);
 
         // When using the Radial Effect, if it finish call a mouseclick event.
-        if (useRadial & reticleRadial >0.99) {
-            if (useRadialRepeat) { reticleRadial = 0; }
-            ExecuteEvents.Execute(targetObject, new BaseEventData(EventSystem.current), ExecuteEvents.submitHandler);
+        if (useRadial & reticleRadial > 0.999) {
+            if (useRadialRepeat) {
+                reticleRadial = 0;
+                enabledDelayedTrigger = true;
+            }
+
+            // Send just one Call
+            if(enabledDelayedTrigger) {
+                enabledDelayedTrigger = false;
+                var pointer = new PointerEventData(EventSystem.current);
+                ExecuteEvents.Execute(targetObject, pointer, ExecuteEvents.pointerClickHandler);
+            }
+            //ExecuteEvents.Execute(targetObject, new BaseEventData(EventSystem.current), ExecuteEvents.submitHandler);
         }
   }
 
