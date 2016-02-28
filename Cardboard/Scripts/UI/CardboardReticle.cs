@@ -20,7 +20,7 @@ using UnityEngine.EventSystems;
 [RequireComponent(typeof(Renderer))]
 public class CardboardReticle : MonoBehaviour, ICardboardPointer {
   /// Number of segments making the reticle circle.
-  public int reticleSegments = 20;
+  public int reticleSegments = 60;
 
   /// Growth speed multiplier for the reticle/
   public float reticleGrowthSpeed = 8.0f;
@@ -39,14 +39,14 @@ public class CardboardReticle : MonoBehaviour, ICardboardPointer {
   // Current inner angle of the reticle (in degrees).
   private float reticleInnerAngle = 0.0f;
   // Current outer angle of the reticle (in degrees).
-  private float reticleOuterAngle = 0.5f;
+  private float reticleOuterAngle = 0.3f;
   // Current distance of the reticle (in meters).
   private float reticleDistanceInMeters = 10.0f;
 
   // Minimum inner angle of the reticle (in degrees).
   private const float kReticleMinInnerAngle = 0.0f;
   // Minimum outer angle of the reticle (in degrees).
-  private const float kReticleMinOuterAngle = 0.5f;
+  private const float kReticleMinOuterAngle = 0.3f;
   // Angle at which to expand the reticle when intersecting with an object
   // (in degrees).
   private const float kReticleGrowthAngle = 1.5f;
