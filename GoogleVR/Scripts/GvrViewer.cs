@@ -169,7 +169,25 @@ public class GvrViewer : MonoBehaviour {
   /// @cond
   /// Use unity remote as the input source.
   [HideInInspector]
-  public bool UseUnityRemoteInput = false;
+  public bool UseUnityRemoteInput {
+    get
+    {
+      return useUnityRemoteInput;
+    }
+    set
+    {
+      if (value != useUnityRemoteInput)
+      {
+        useUnityRemoteInput = value;
+        if (device != null)
+        {
+          device.UpdateScreenData();
+        }
+      }
+    }
+  }
+  [SerializeField]
+  private bool useUnityRemoteInput = false;
   /// @endcond
 
   /// The screen size to emulate when testing in the Unity Editor.
