@@ -43,6 +43,9 @@ public class GvrViewerEditor : Editor {
   GUIContent autoUntiltHeadLabel = new GUIContent("Auto Untilt Head",
       "When enabled, just release Ctrl to untilt the head.");
 
+  GUIContent UseUnityRemoteInputLabel = new GUIContent("Use unity remote as the input.",
+      "When you can use Unity Remote Gyro");
+
   GUIContent screenSizeLabel = new GUIContent("Screen Size",
       "The screen size to emulate.");
 
@@ -76,6 +79,8 @@ public class GvrViewerEditor : Editor {
     EditorGUILayout.LabelField(editorSettingsLabel, headingStyle);
     gvrViewer.autoUntiltHead =
         EditorGUILayout.Toggle(autoUntiltHeadLabel, gvrViewer.autoUntiltHead);
+    gvrViewer.UseUnityRemoteInput =
+        EditorGUILayout.Toggle(UseUnityRemoteInputLabel, gvrViewer.UseUnityRemoteInput);
     gvrViewer.ScreenSize = (GvrProfile.ScreenSizes)
         EditorGUILayout.EnumPopup(screenSizeLabel, gvrViewer.ScreenSize);
     gvrViewer.ViewerType = (GvrProfile.ViewerTypes)
