@@ -266,12 +266,13 @@ public class GvrController : MonoBehaviour {
   }
 
   IEnumerator EndOfFrame() {
+    object eof = new WaitForEndOfFrame();
     while (true) {
       // This must be done at the end of the frame to ensure that all GameObjects had a chance
       // to read transient controller state (e.g. events, etc) for the current frame before
       // it gets reset.
       UpdateController();
-      yield return new WaitForEndOfFrame();
+      yield return eof;
     }
   }
 }
