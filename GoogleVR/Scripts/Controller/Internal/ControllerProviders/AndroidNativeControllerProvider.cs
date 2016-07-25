@@ -85,12 +85,24 @@ namespace Gvr.Internal {
       internal byte touch_up;
       internal byte recentered;
       internal byte recentering;
-      [MarshalAs(UnmanagedType.ByValArray, SizeConst=GVR_CONTROLLER_BUTTON_COUNT)]
-      internal byte[] button_state;
-      [MarshalAs(UnmanagedType.ByValArray, SizeConst=GVR_CONTROLLER_BUTTON_COUNT)]
-      internal byte[] button_down;
-      [MarshalAs(UnmanagedType.ByValArray, SizeConst=GVR_CONTROLLER_BUTTON_COUNT)]
-      internal byte[] button_up;
+      internal byte button_state_none;
+      internal byte button_state_click;
+      internal byte button_state_home;
+      internal byte button_state_app;
+      internal byte button_state_volume_up;
+      internal byte button_state_volume_down;
+      internal byte button_down_none;
+      internal byte button_down_click;
+      internal byte button_down_home;
+      internal byte button_down_app;
+      internal byte button_down_volume_up;
+      internal byte button_down_volume_down;
+      internal byte button_up_none;
+      internal byte button_up_click;
+      internal byte button_up_home;
+      internal byte button_up_app;
+      internal byte button_up_volume_up;
+      internal byte button_up_volume_down;
       internal long last_orientation_timestamp;
       internal long last_gyro_timestamp;
       internal long last_accel_timestamp;
@@ -209,13 +221,12 @@ namespace Gvr.Internal {
       outState.touchDown = 0 != state.touch_down;
       outState.touchUp = 0 != state.touch_up;
 
-      outState.appButtonDown = 0 != state.button_down[GVR_CONTROLLER_BUTTON_APP];
-      outState.appButtonState = 0 != state.button_state[GVR_CONTROLLER_BUTTON_APP];
-      outState.appButtonUp = 0 != state.button_up[GVR_CONTROLLER_BUTTON_APP];
-      outState.clickButtonDown = 0 != state.button_down[GVR_CONTROLLER_BUTTON_CLICK];
-      outState.clickButtonState = 0 != state.button_state[GVR_CONTROLLER_BUTTON_CLICK];
-      outState.clickButtonUp = 0 != state.button_up[GVR_CONTROLLER_BUTTON_CLICK];
-
+      outState.appButtonDown = 0 != state.button_down_app;
+      outState.appButtonState = 0 != state.button_state_app;
+      outState.appButtonUp = 0 != state.button_up_app;
+      outState.clickButtonDown = 0 != state.button_down_click;
+      outState.clickButtonState = 0 != state.button_state_click;
+      outState.clickButtonUp = 0 != state.button_up_click;
       outState.recentering = 0 != state.recentering;
       outState.recentered = 0 != state.recentered;
     }
