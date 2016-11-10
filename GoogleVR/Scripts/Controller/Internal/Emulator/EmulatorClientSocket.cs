@@ -115,7 +115,7 @@ namespace Gvr.Internal {
           Debug.LogFormat("Attempting to connect to {0}:{1}.", addr, kPhoneEventPort);
           TcpClient tcpClient = new TcpClient(addr, kPhoneEventPort);
           Debug.Log("Connected to phone event socket: " + addr + ":" + kPhoneEventPort);
-          connected = true;
+
           ProcessConnection(tcpClient);
           tcpClient.Close();
           Debug.Log("Disconnected.");
@@ -154,6 +154,9 @@ namespace Gvr.Internal {
           Debug.LogWarning("Socket read failed, considering socket to have been disconnected.");
           return;
         }
+
+        // Established controller emulator connection.
+        connected = true;
 
         PhoneEvent proto =
             PhoneEvent.CreateBuilder().MergeFrom(dataBuffer).Build();
