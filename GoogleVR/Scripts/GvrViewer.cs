@@ -333,6 +333,9 @@ public class GvrViewer : MonoBehaviour {
   public Uri DefaultDeviceProfile = null;
   /// @endcond
 
+  // The screen sleep timeout used when instantiating GvrViewer
+  private int oldScreenSleepTimeout;
+
   private void InitDevice() {
     if (device != null) {
       device.Destroy();
@@ -376,7 +379,12 @@ public class GvrViewer : MonoBehaviour {
 #if UNITY_IOS
     Application.targetFrameRate = 60;
 #endif
-    // Prevent the screen from dimming / sleeping
+    // Prevent the screen from dimming / sleeping but remember current value to restore it later
+    oldScreenSleepTimeout = Screen.sleepTimeout;
+    if (oldScreenSleepTimeout >= 0) {
+      // "get" may return the number of seconds while "set" only allows predefined values
+      oldScreenSleepTimeout = SleepTimeout.SystemSetting;
+    }
     Screen.sleepTimeout = SleepTimeout.NeverSleep;
     InitDevice();
     StereoScreen = null;
@@ -537,6 +545,7 @@ public class GvrViewer : MonoBehaviour {
     if (device != null) {
       device.Destroy();
     }
+    Screen.sleepTimeout = oldScreenSleepTimeout;
     if (instance == this) {
       instance = null;
     }
