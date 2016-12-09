@@ -342,9 +342,11 @@ public class GvrController : MonoBehaviour {
       // This must be done at the end of the frame to ensure that all GameObjects had a chance
       // to read transient controller state (e.g. events, etc) for the current frame before
       // it gets reset.
-      yield return waitForEndOfFrame;
+      yield return waitForEndOfFrame;      
       UpdateController();
-      OnControllerUpdate();
+      if(OnControllerUpdate != null) {
+        OnControllerUpdate();
+      }
     }
   }
 }
