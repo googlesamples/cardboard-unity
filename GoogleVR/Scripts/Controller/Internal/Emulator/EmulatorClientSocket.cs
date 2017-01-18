@@ -109,7 +109,7 @@ namespace Gvr.Internal {
 
 #else
       string processFilename = "bash";
-      string processArguments = string.Format("-l -c \"{0}\"", adbCommand);
+      string processArguments = string.Format(" -c \"{0}\"", adbCommand);
 
       // "command not found" (see http://tldp.org/LDP/abs/html/exitcodes.html)
       int kExitCodeCommandNotFound = 127;
