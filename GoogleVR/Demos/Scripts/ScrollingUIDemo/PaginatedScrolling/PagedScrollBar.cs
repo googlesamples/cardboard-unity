@@ -65,9 +65,13 @@ public class PagedScrollBar : Scrollbar {
       float offset = value * (pagedScrollRect.PageCount - 1) * pagedScrollRect.PageSpacing;
       pagedScrollRect.SetScrollOffsetOverride(offset);
     } else {
-      // Calculate the desired a value of the scrollbar.
-      float desiredValue = (float)pagedScrollRect.ActivePageIndex / (pagedScrollRect.PageCount - 1);
-
+      float desiredValue;
+      if(pagedScrollRect.PageCount >= 2){
+        // Calculate the desired a value of the scrollbar.
+        desiredValue = (float)pagedScrollRect.ActivePageIndex / (pagedScrollRect.PageCount - 1);
+      } else {
+        desiredValue = 1.0f; 
+      }
       // Animate towards the desired value.
       value = Mathf.Lerp(value, desiredValue, Time.deltaTime * LERP_SPEED);
     }
