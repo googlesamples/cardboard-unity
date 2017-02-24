@@ -194,9 +194,9 @@ public class GvrReticlePointer : GvrBasePointer {
     float outer_diameter = 2.0f * Mathf.Tan(outer_half_angle_radians);
 
     reticleInnerDiameter =
-        Mathf.Lerp(reticleInnerDiameter, inner_diameter, Time.deltaTime * reticleGrowthSpeed);
+        Mathf.Lerp(reticleInnerDiameter, inner_diameter, Time.unscaledDeltaTime * reticleGrowthSpeed);
     reticleOuterDiameter =
-        Mathf.Lerp(reticleOuterDiameter, outer_diameter, Time.deltaTime * reticleGrowthSpeed);
+        Mathf.Lerp(reticleOuterDiameter, outer_diameter, Time.unscaledDeltaTime * reticleGrowthSpeed);
 
     materialComp.SetFloat("_InnerDiameter", reticleInnerDiameter * reticleDistanceInMeters);
     materialComp.SetFloat("_OuterDiameter", reticleOuterDiameter * reticleDistanceInMeters);
