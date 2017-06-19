@@ -17,7 +17,13 @@ using UnityEngine;
 // Simple static class to abstract out several jni calls that need to be shared
 // between different classes.
 public static class GvrActivityHelper {
+
+#if UNITY_IOS
+  public const string GVR_DLL_NAME = "__Internal";
+#else
   public const string GVR_DLL_NAME = "gvr";
+#endif  // UNITY_IOS
+
   public const string PACKAGE_UNITY_PLAYER = "com.unity3d.player.UnityPlayer";
 
 #if UNITY_ANDROID && !UNITY_EDITOR
