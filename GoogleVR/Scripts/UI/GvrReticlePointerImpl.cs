@@ -32,8 +32,11 @@ public class GvrReticlePointerImpl : GvrBasePointer {
   // Maximum distance of the reticle (in meters).
   public const float RETICLE_DISTANCE_MAX = 10.0f;
 
-  /// Growth speed multiplier for the reticle.
-  public float ReticleGrowthSpeed { private get; set; }
+  // The time it takes for the reticle to reach its maximum size
+  public float TimeToTargetReticleDiameter { private get; set; }
+
+  // The time since the reticle's target size was last changed 
+  private float timeSinceTargetChanged = 0.0f;
 
   public Material MaterialComp { private get; set; }
 
@@ -61,7 +64,7 @@ public class GvrReticlePointerImpl : GvrBasePointer {
   public override float MaxPointerDistance { get { return RETICLE_DISTANCE_MAX; } }
 
   public GvrReticlePointerImpl() {
-    ReticleGrowthSpeed = 8.0f;
+    TimeToTargetReticleDiameter = 2.0f;
     ReticleInnerAngle = 0.0f;
     ReticleOuterAngle = 0.5f;
     ReticleDistanceInMeters = 10.0f;
@@ -87,6 +90,7 @@ public class GvrReticlePointerImpl : GvrBasePointer {
   /// The intersectionRay is the ray that was cast to determine the intersection.
   public override void OnPointerEnter(RaycastResult rayastResult, Ray ray,
     bool isInteractive) {
+    timeSinceTargetChanged = 0.0f;
     SetPointerTarget(rayastResult.worldPosition, isInteractive);
   }
 
@@ -106,6 +110,7 @@ public class GvrReticlePointerImpl : GvrBasePointer {
   /// This is also called just before **OnInputModuleDisabled** and may have have any of
   /// the values set as **null**.
   public override void OnPointerExit(GameObject previousObject) {
+    timeSinceTargetChanged = 0.0f;
     ReticleDistanceInMeters = RETICLE_DISTANCE_MAX;
     ReticleInnerAngle = RETICLE_MIN_INNER_ANGLE;
     ReticleOuterAngle = RETICLE_MIN_OUTER_ANGLE;
@@ -145,10 +150,13 @@ public class GvrReticlePointerImpl : GvrBasePointer {
     float inner_diameter = 2.0f * Mathf.Tan(inner_half_angle_radians);
     float outer_diameter = 2.0f * Mathf.Tan(outer_half_angle_radians);
 
+    timeSinceTargetChanged += Time.deltaTime;
+    float reticleLerpProportion = timeSinceTargetChanged/TimeToTargetReticleDiameter;
+    
     ReticleInnerDiameter =
-        Mathf.Lerp(ReticleInnerDiameter, inner_diameter, Time.deltaTime * ReticleGrowthSpeed);
+        Mathf.Lerp(ReticleInnerDiameter, inner_diameter, reticleLerpProportion);
     ReticleOuterDiameter =
-        Mathf.Lerp(ReticleOuterDiameter, outer_diameter, Time.deltaTime * ReticleGrowthSpeed);
+        Mathf.Lerp(ReticleOuterDiameter, outer_diameter, reticleLerpProportion);
 
     MaterialComp.SetFloat("_InnerDiameter", ReticleInnerDiameter * ReticleDistanceInMeters);
     MaterialComp.SetFloat("_OuterDiameter", ReticleOuterDiameter * ReticleDistanceInMeters);
