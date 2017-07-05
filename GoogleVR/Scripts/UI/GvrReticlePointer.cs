@@ -24,8 +24,8 @@ public class GvrReticlePointer : MonoBehaviour {
   /// Number of segments making the reticle circle.
   public int reticleSegments = 20;
 
-  /// Growth speed multiplier for the reticle/
-  public float reticleGrowthSpeed = 8.0f;
+  /// The time it takes for the reticle to reach its target diameter
+  public float timeToTargetReticleDiameter = 2.0f;
 
   void Awake() {
     reticlePointerImpl = new GvrReticlePointerImpl();
@@ -107,7 +107,7 @@ public class GvrReticlePointer : MonoBehaviour {
     if (reticlePointerImpl == null) {
       return;
     }
-    reticlePointerImpl.ReticleGrowthSpeed = reticleGrowthSpeed;
+    reticlePointerImpl.TimeToTargetReticleDiameter = timeToTargetReticleDiameter;
     reticlePointerImpl.PointerTransform = transform;
   }
 }
