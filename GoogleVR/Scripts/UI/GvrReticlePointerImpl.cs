@@ -33,10 +33,10 @@ public class GvrReticlePointerImpl : GvrBasePointer {
   public const float RETICLE_DISTANCE_MAX = 10.0f;
 
   // The time it takes for the reticle to reach its maximum size
-  public float TimeToTargetReticleDiameter { private get; set; }
+  public float MaxTimeToTargetReticleDiameter { private get; set; }
 
   // The time since the reticle's target size was last changed 
-  private float timeSinceTargetChanged = 0.0f;
+  private float timeSincePointerEnterOrExit = 0.0f;
 
   public Material MaterialComp { private get; set; }
 
@@ -58,18 +58,23 @@ public class GvrReticlePointerImpl : GvrBasePointer {
 
   public float ReticleOuterDiameter { get; private set; }
 
+  // used for calculating diameter interpolation
+  private float reticleInnerDiameterOnEvent;
+  private float reticleOuterDiameterOnEvent;
+  private float timeToTargetReticleDiameter;
+
   private Vector3 targetPoint = Vector3.zero;
   public override Vector3 LineEndPoint { get { return targetPoint; } }
 
   public override float MaxPointerDistance { get { return RETICLE_DISTANCE_MAX; } }
 
   public GvrReticlePointerImpl() {
-    TimeToTargetReticleDiameter = 2.0f;
+    MaxTimeToTargetReticleDiameter = 0.5f;
     ReticleInnerAngle = 0.0f;
     ReticleOuterAngle = 0.5f;
     ReticleDistanceInMeters = 10.0f;
-    ReticleInnerDiameter = 0.0f;
-    ReticleOuterDiameter = 0.0f;
+    ReticleInnerDiameter = reticleInnerDiameterOnEvent = 0.0f;
+    ReticleOuterDiameter = reticleOuterDiameterOnEvent = 0.0f;
   }
 
   public override void OnStart () {
@@ -90,7 +95,7 @@ public class GvrReticlePointerImpl : GvrBasePointer {
   /// The intersectionRay is the ray that was cast to determine the intersection.
   public override void OnPointerEnter(RaycastResult rayastResult, Ray ray,
     bool isInteractive) {
-    timeSinceTargetChanged = 0.0f;
+    UpdateDiameterInfo();
     SetPointerTarget(rayastResult.worldPosition, isInteractive);
   }
 
@@ -110,7 +115,7 @@ public class GvrReticlePointerImpl : GvrBasePointer {
   /// This is also called just before **OnInputModuleDisabled** and may have have any of
   /// the values set as **null**.
   public override void OnPointerExit(GameObject previousObject) {
-    timeSinceTargetChanged = 0.0f;
+    UpdateDiameterInfo();
     ReticleDistanceInMeters = RETICLE_DISTANCE_MAX;
     ReticleInnerAngle = RETICLE_MIN_INNER_ANGLE;
     ReticleOuterAngle = RETICLE_MIN_OUTER_ANGLE;
@@ -123,6 +128,14 @@ public class GvrReticlePointerImpl : GvrBasePointer {
   /// Called when a trigger event is finished. This is practically when
   /// the user releases the trigger.
   public override void OnPointerClickUp() {}
+
+  private void UpdateDiameterInfo(){
+    timeToTargetReticleDiameter = timeSincePointerEnterOrExit;
+    timeSincePointerEnterOrExit = 0;
+
+    reticleInnerDiameterOnEvent = ReticleInnerDiameter;
+    reticleOuterDiameterOnEvent = ReticleOuterDiameter;
+  }
 
   public override void GetPointerRadius(out float enterRadius, out float exitRadius) {
     float min_inner_angle_radians = Mathf.Deg2Rad * RETICLE_MIN_INNER_ANGLE;
@@ -150,13 +163,15 @@ public class GvrReticlePointerImpl : GvrBasePointer {
     float inner_diameter = 2.0f * Mathf.Tan(inner_half_angle_radians);
     float outer_diameter = 2.0f * Mathf.Tan(outer_half_angle_radians);
 
-    timeSinceTargetChanged += Time.deltaTime;
-    float reticleLerpProportion = timeSinceTargetChanged/TimeToTargetReticleDiameter;
+    timeSincePointerEnterOrExit += Time.deltaTime;
+    timeSincePointerEnterOrExit = Mathf.Clamp(timeSincePointerEnterOrExit, 0, MaxTimeToTargetReticleDiameter);
+
+    float reticleSizeInterpolation = timeSincePointerEnterOrExit/timeToTargetReticleDiameter;
     
     ReticleInnerDiameter =
-        Mathf.Lerp(ReticleInnerDiameter, inner_diameter, reticleLerpProportion);
+        Mathf.Lerp(reticleInnerDiameterOnEvent, inner_diameter, reticleSizeInterpolation);
     ReticleOuterDiameter =
-        Mathf.Lerp(ReticleOuterDiameter, outer_diameter, reticleLerpProportion);
+        Mathf.Lerp(reticleOuterDiameterOnEvent, outer_diameter, reticleSizeInterpolation);
 
     MaterialComp.SetFloat("_InnerDiameter", ReticleInnerDiameter * ReticleDistanceInMeters);
     MaterialComp.SetFloat("_OuterDiameter", ReticleOuterDiameter * ReticleDistanceInMeters);
