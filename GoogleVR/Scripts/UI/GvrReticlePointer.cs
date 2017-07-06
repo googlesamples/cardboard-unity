@@ -25,7 +25,7 @@ public class GvrReticlePointer : MonoBehaviour {
   public int reticleSegments = 20;
 
   /// The time it takes for the reticle to reach its target diameter
-  public float timeToTargetReticleDiameter = 2.0f;
+  public float maxTimeToTargetReticleDiameter = 0.5f;
 
   void Awake() {
     reticlePointerImpl = new GvrReticlePointerImpl();
@@ -107,7 +107,7 @@ public class GvrReticlePointer : MonoBehaviour {
     if (reticlePointerImpl == null) {
       return;
     }
-    reticlePointerImpl.TimeToTargetReticleDiameter = timeToTargetReticleDiameter;
+    reticlePointerImpl.MaxTimeToTargetReticleDiameter = maxTimeToTargetReticleDiameter;
     reticlePointerImpl.PointerTransform = transform;
   }
 }
