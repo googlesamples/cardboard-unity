@@ -67,6 +67,7 @@ public class GvrEditorEmulator : MonoBehaviour {
 
     bool rolled = false;
     if (CanChangeYawPitch()) {
+      Cursor.lockState = CursorLockMode.Locked;
       mouseX += Input.GetAxis(AXIS_MOUSE_X) * 5;
       if (mouseX <= -180) {
         mouseX += 360;
@@ -76,10 +77,15 @@ public class GvrEditorEmulator : MonoBehaviour {
       mouseY -= Input.GetAxis(AXIS_MOUSE_Y) * 2.4f;
       mouseY = Mathf.Clamp(mouseY, -85, 85);
     } else if (CanChangeRoll()) {
+      Cursor.lockState = CursorLockMode.Locked;
       rolled = true;
       mouseZ += Input.GetAxis(AXIS_MOUSE_X) * 5;
       mouseZ = Mathf.Clamp(mouseZ, -85, 85);
-    }
+      }
+      else
+      {
+          Cursor.lockState = CursorLockMode.None;
+      }
 
     if (!rolled) {
       // People don't usually leave their heads tilted to one side for long.
