@@ -97,6 +97,7 @@ public class GvrKeyboard : MonoBehaviour {
 
   public string EditorText {
     get { return instance != null ? instance.keyboardState.editorText : string.Empty; }
+    set { keyboardProvider.EditorText = value; }
   }
 
   public GvrKeyboardInputMode Mode {
