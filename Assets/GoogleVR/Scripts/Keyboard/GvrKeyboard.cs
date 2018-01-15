@@ -18,6 +18,7 @@ using Gvr.Internal;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 // Events to update the keyboard.
 // These values depend on C API keyboard values
@@ -312,6 +313,7 @@ public class GvrKeyboard : MonoBehaviour {
     }
   }
 
+  [AOT.MonoPInvokeCallback (typeof (GvrKeyboard.KeyboardCallback))]
   private static void OnKeyboardCallback(IntPtr closure, GvrKeyboardEvent keyboardEvent) {
     lock (callbacksLock) {
       threadSafeCallbacks.Add(keyboardEvent);
