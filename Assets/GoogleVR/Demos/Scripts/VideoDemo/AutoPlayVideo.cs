@@ -58,8 +58,7 @@ namespace GoogleVR.VideoDemo {
       }
 
       t += Time.deltaTime;
-      if (t >= delay && player != null) {
-        player.Play();
+      if (t >= delay && player != null && player.Play()) {
         done = true;
       }
     }
