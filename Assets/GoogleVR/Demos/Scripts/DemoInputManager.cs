@@ -16,6 +16,10 @@
 #define RUNNING_ON_ANDROID_DEVICE
 #endif  // UNITY_ANDROID && !UNITY_EDITOR
 
+#if UNITY_IOS && !UNITY_EDITOR
+#define RUNNING_ON_IOS_DEVICE
+#endif // UNITY_IOS && !UNITY_EDITOR
+
 namespace GoogleVR.Demos {
   using UnityEngine;
   using UnityEngine.UI;
@@ -88,7 +92,11 @@ namespace GoogleVR.Demos {
       }
       // Message canvas will be enabled later when there's a message to display.
       messageCanvas.SetActive(false);
-#if !RUNNING_ON_ANDROID_DEVICE
+#if RUNNING_ON_IOS_DEVICE
+      // On iOS, use the Daydream controller if one's connected, and fall back to the gaze pointer if not.
+      // For notes on enabling iOS Daydream controller support, see iOSNativeControllerProvider.
+      isDaydream = GvrControllerInput.State == GvrConnectionState.Connected;
+#elif !RUNNING_ON_ANDROID_DEVICE
       if (playerSettingsHasDaydream() || playerSettingsHasCardboard()) {
         // The list is populated with valid VR SDK(s), pick the first one.
         gvrEmulatedPlatformType =
@@ -126,7 +134,10 @@ namespace GoogleVR.Demos {
     void Update() {
       UpdateStatusMessage();
 
-#if !RUNNING_ON_ANDROID_DEVICE
+#if RUNNING_ON_IOS_DEVICE
+      isDaydream = GvrControllerInput.State == GvrConnectionState.Connected;
+      SetVRInputMechanism();
+#elif !RUNNING_ON_ANDROID_DEVICE
       UpdateEmulatedPlatformIfPlayerSettingsChanged();
       if ((isDaydream && gvrEmulatedPlatformType == EmulatedPlatformType.Daydream) ||
           (!isDaydream && gvrEmulatedPlatformType == EmulatedPlatformType.Cardboard)) {

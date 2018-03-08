@@ -31,6 +31,9 @@ namespace Gvr.Internal {
 #elif UNITY_ANDROID
       // Use the GVR C API.
       return new AndroidNativeControllerProvider();
+#elif UNITY_IOS && GVR_IOS_DAYDREAM_CONTROLLER_ENABLED
+      // Use the native iOS plugin.
+      return new iOSNativeControllerProvider();
 #else
       // Platform not supported.
       Debug.LogWarning("No controller support on this platform.");
