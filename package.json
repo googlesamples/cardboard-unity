@@ -3,6 +3,6 @@
     "displayName": "GoogleVR",
     "version": "1.190.1",
     "unity": "2018.3",
-    "description": "FooBar",
+    "description": "Google VR SDK for Unity",
     "category": "Plugins"
 }
