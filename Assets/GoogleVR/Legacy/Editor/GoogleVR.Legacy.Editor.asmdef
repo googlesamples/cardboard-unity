@@ -1,0 +1,16 @@
+{
+    "name": "GoogleVR.Legacy.Editor",
+    "references": [
+        "GoogleVR"
+    ],
+    "optionalUnityReferences": [],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": []
+}

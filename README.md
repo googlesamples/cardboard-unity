@@ -31,6 +31,10 @@ page.
 You can also clone and use the `googlevr/gvr-unity-sdk` git repository
 directly in a Unity project.
 
+For Unity 2018.3 or newer you can add sdk as package 
+1. Open `<packageName>/Packages/manifest.json`
+2. Add `"com.google.vr": "https://github.com/googlevr/gvr-unity-sdk.git"` into "dependencies" 
+3. Wait for import
 
 ## Getting Started
 
